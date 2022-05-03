@@ -29,6 +29,7 @@
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 void DoMovement();
+void animacion();
 
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -42,13 +43,33 @@ bool keys[1024];
 bool firstMouse = true;
 // Light attributes
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
+glm::vec3 PosIni(0.0f, 0.0f, 0.0f);
+
 bool active;
-float anim1;
+float anim1=0.0f;
+float tiempo;
+int bandera;
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-	glm::vec3(0.0f,3.0f, 0.0f)
+	glm::vec3(0.0f,3.0f, 0.0f),
+	glm::vec3(1.5f, 0.82f, 1.15f)
+
 };
+
+
+float movKitX = 0.0;
+float movKitZ = 3.0;
+float rotKit = 0.0;
+
+bool circuito = false;
+
+bool recorrido1 = true;
+bool recorrido2 = false;
+bool recorrido3 = false;
+bool recorrido4 = false;
+bool recorrido5 = false;
+
 
 float vertices[] = {
 	 -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -108,14 +129,14 @@ int main()
 	// Init GLFW
 	glfwInit();
 	// Set all the required options for GLFW
-	/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Iluminacion 2", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Picapiedras", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -134,7 +155,7 @@ int main()
 	glfwSetCursorPosCallback(window, MouseCallback);
 
 	// GLFW Options
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
@@ -148,11 +169,28 @@ int main()
 	// Define the viewport dimensions
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-
+	glEnable(GL_DEPTH_TEST);
 
 	Shader lightingShader("Shaders/lighting.vs", "Shaders/lighting.frag");
 	Shader lampShader("Shaders/lamp.vs", "Shaders/lamp.frag");
 
+	//Cuerpo
+	Model DinoC((char*)"Models/Obj/Models/DinoPerson/Cuerpo/Cuerpo.obj");	
+	//Pies
+	Model DinoP((char*)"Models/Obj/Models/DinoPerson/Pies/Pies.obj");
+
+	//Animacion Cielo
+	Shader Anim("Shaders/anim.vs", "Shaders/anim.frag");
+	//Cielo
+	Model Cielo((char*)"Models/Obj/Models/Cielo/Cielo.obj");
+	//Montañas
+	Model Montañas((char*)"Models/Obj/Models/Montañas/Montañas.obj");
+	//Rio
+	Model Rio((char*)"Models/Obj/Models/Rio/Rio.obj");
+	//Dinosaurio
+	Model Dinosaurio((char*)"Models/Obj/Models/Dinosaurio/Dinosaurio.obj");
+	//Dinosaurios
+	Model Dinosaurios((char*)"Models/Obj/Models/Dinosaurios/Dinosaurios.obj");
 	//Terreno
 	Model Piso((char*)"Models/Obj/Models/Piso/Piso.obj");
 	//Fachada
@@ -219,13 +257,14 @@ int main()
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 		DoMovement();
+		animacion();
 
 		// Clear the colorbuffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// OpenGL options
-		glEnable(GL_DEPTH_TEST);
+		//// OpenGL options
+		//glEnable(GL_DEPTH_TEST);
 
 
 
@@ -261,7 +300,7 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
 
 		// SpotLight
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), 1.8, 0.75f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), 1.5f, 0.82f, 1.18f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.direction"), -5.0f, 0.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.ambient"), anim1, anim1, anim1);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.diffuse"), anim1, anim1, anim1);
@@ -288,10 +327,26 @@ int main()
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-
+		glBindVertexArray(VAO);
 		glm::mat4 model(1);
 
+		//Cuerpo
+		view = camera.GetViewMatrix();
+		model = glm::mat4(1);
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		DinoC.Draw(lightingShader);
 
+		//Pies
+		view = camera.GetViewMatrix();
+		model = glm::mat4(1);
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		DinoP.Draw(lightingShader);
+
+		glBindVertexArray(0);
 
 		//Carga de modelo 
 		view = camera.GetViewMatrix();
@@ -299,7 +354,16 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
 		Piso.Draw(lightingShader);
-
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Cielo.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montañas.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Rio.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Dinosaurio.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Dinosaurios.Draw(lightingShader);
 		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 	
 		//Modelo
@@ -331,14 +395,29 @@ int main()
 		Tapete.Draw(lightingShader);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Libros.Draw(lightingShader);
-
 		//glDisable(GL_BLEND); //Desactiva el canal alfa 
 		glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1.0, 1.0, 1.0, 1.0);
 		glBindVertexArray(0);
 
+		Anim.Use();
+		tiempo = glfwGetTime();
+		modelLoc = glGetUniformLocation(Anim.Program, "model");
+		viewLoc = glGetUniformLocation(Anim.Program, "view");
+		projLoc = glGetUniformLocation(Anim.Program, "projection");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniform1f(glGetUniformLocation(Anim.Program, "time"), tiempo);
+		model = glm::mat4(1);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Cielo.Draw(Anim);
+
+		glBindVertexArray(0);
 
 		// Also draw the lamp object, again binding the appropriate shader
 		lampShader.Use();
+		
+		
 		// Get location objects for the matrices on the lamp shader (these could be different on a different shader)
 		modelLoc = glGetUniformLocation(lampShader.Program, "model");
 		viewLoc = glGetUniformLocation(lampShader.Program, "view");
@@ -360,6 +439,12 @@ int main()
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		model = glm::mat4(1);
+		model = glm::translate(model, pointLightPositions[1]);
+		model = glm::scale(model, glm::vec3(0.2f,0.5f,0.7f)); // Make it a smaller cube
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
 
@@ -409,7 +494,10 @@ void DoMovement()
 
 	}
 
-
+	if (keys[GLFW_KEY_I])
+	{
+		circuito = true;
+	}
 
 	if (keys[GLFW_KEY_SPACE])
 	{
@@ -424,10 +512,50 @@ void DoMovement()
 		}
 	}
 
+	if (keys[GLFW_KEY_O])
+	{
+		circuito = false;
+	}
 
 }
 
-// Is called whenever a key is pressed/released via GLFW
+
+/// Animación Dinosaurio
+void animacion()
+{
+	if (circuito)
+	{
+		if (recorrido1)
+		{
+			movKitX += 0.1f;
+			if (movKitX > 20)
+			{
+				recorrido1 = false;
+				recorrido2 = true;
+			}
+		}
+		if (recorrido2)
+		{
+			rotKit += 1;
+			if (rotKit > 360)
+			{
+				recorrido2 = false;
+				recorrido3 = true;
+			}
+		}
+		if (recorrido3)
+		{
+			movKitX -= 0.1f;
+			if (movKitX < 0)
+			{
+				recorrido3 = false;
+				recorrido4 = true;
+			}
+		}
+	}
+}
+	
+	// Is called whenever a key is pressed/released via GLFW
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
@@ -449,7 +577,16 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 	if (keys[GLFW_KEY_M])
 	{
-		anim1 = 1.0f;
+		bandera = bandera + 1;
+		if (bandera%2==0)
+		{
+			anim1 = 0.0f;
+		}
+		else
+		{
+			anim1 = 1.0f;
+		}
+
 	}
 
 }
