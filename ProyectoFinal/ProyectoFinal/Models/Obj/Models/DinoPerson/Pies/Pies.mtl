@@ -1,3 +1,10 @@
+newmtl Agua:lambert2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd water5.jpg
+Ni 1.00
 newmtl Cojin:initialShadingGroup
 illum 4
 Kd 0.00 0.00 0.00
@@ -22,13 +29,22 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 1.00
-newmtl Cuerpo:initialShadingGroup
+newmtl Cuerpo3:initialShadingGroup
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd dino.jpg
 Ni 1.00
+newmtl Dragon:palette
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Dragon.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 0.06
 newmtl Fachada:Fachada_initialShadingGroup
 illum 4
 Kd 0.00 0.00 0.00
@@ -82,14 +98,16 @@ illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Mesa1:lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
-newmtl Pies:initialShadingGroup
+newmtl Pies4:initialShadingGroup
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
@@ -101,168 +119,224 @@ illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta1:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta1:lambert5SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Planta1:lambert6SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Tierra.jpg
 Ni 1.00
 newmtl Planta2:lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta2:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta2:lambert5SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Planta2:lambert6SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Tierra.jpg
 Ni 1.00
 newmtl Planta3:lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta3:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta3:lambert5SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Planta3:lambert6SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Tierra.jpg
 Ni 1.00
 newmtl Planta4:lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta4:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta4:lambert5SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Planta4:lambert6SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Tierra.jpg
 Ni 1.00
 newmtl Planta5:lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta5:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
 Ni 1.00
 newmtl Planta5:lambert5SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Planta5:lambert6SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Tierra.jpg
+Ni 1.00
+newmtl Planta6:lambert2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
+Ni 1.00
+newmtl Planta6:lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Arbusto.jpg
+Ni 1.00
+newmtl Planta6:lambert5SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
+Ni 1.00
+newmtl Planta6:lambert6SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Tierra.jpg
 Ni 1.00
 newmtl Sillon:lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Sillon:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Sillon:lambert4SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Sillon:lambert5SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Sillon1:lambert2SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Sillon1:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Sillon1:lambert4SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl Sillon1:lambert5SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl TV1:Materiais_001
 illum 4
@@ -299,6 +373,7 @@ illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
 Ni 1.00
 newmtl TV1:tv
 illum 4
