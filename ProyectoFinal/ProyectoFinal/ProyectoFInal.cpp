@@ -1,3 +1,14 @@
+/*
+* Proyecto Final.cpp
+* 
+* Nombre del Proyecto: Entorno de los picapiedra
+* 
+* Autor: Hernández Hernández Alonso de Jesús
+* 
+* Materia: Computación Grafica Interacción Humano Computadora
+*/
+
+/*Sección de declaración de bibliotecas y dependecias a usar para su procesamiento*/
 #include <iostream>
 #include <cmath>
 #include <Windows.h>
@@ -27,50 +38,65 @@
 #include "Model.h"
 #include "Texture.h"
 
+/*Declaración de las funciones a utilizar*/
 // Function prototypes
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 void DoMovement();
 void animacion();
 void animacion2();
+void animacion3();
 void Sonido();
 void Sonido2();
+void Sonido3();
 
-// Window dimensions
+
+// Dimensiones de la ventana al crear
 const GLuint WIDTH = 1920, HEIGHT = 1080;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
-// Camera
-Camera  camera(glm::vec3(0.0f, 0.0f, 3.0f));
+// Declaración de modelo de camara y su posición
+Camera  camera(glm::vec3(4.0f, 1.0f, 0.0f));
 GLfloat lastX = WIDTH / 2.0;
 GLfloat lastY = HEIGHT / 2.0;
+
+//Arreglo para teclas
 bool keys[1024];
+
+//Variable de uso de movimiento de ratón (periferico)
 bool firstMouse = true;
-float rot = 0.0f;
 
-// Light attributes
+
+// Atributos del uso de ilumincación, posición inicial
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-glm::vec3 PosIni(0.0f, 0.0f, 0.0f);
 
+//Declaración de posición inical de objeto a mover con Key Frames
+glm::vec3 PosIni(0.0f, 0.0f, 0.0f);
+glm::vec3 PosIni2(0.0f, 0.0f, 0.0f);
+
+
+/*Declaración de variables, para activar animaciones */
 bool active;
 float anim1=0.0f;
 float tiempo;
 int bandera;
 
-// Positions of the point lights
+// Posición inicial del pointlight y cubo
 glm::vec3 pointLightPositions[] = {
 	glm::vec3(0.0f,3.0f, 0.0f),
 	glm::vec3(1.5f, 0.82f, 1.15f)
 
 };
 
-
+//Variables de movimiento y rotación para animación 3
 float movKitX = 0.0;
 float movKitZ = 0.0;
 float rotKit = 0.0;
 
+//Bandera a usar la activación de recorrido de movimiento 
 bool circuito = false;
 
+/*Banderas para activar movimiento y recorrido por secciones*/
 bool recorrido1 = true;
 bool recorrido2 = false;
 bool recorrido3 = false;
@@ -81,16 +107,28 @@ bool recorrido7 = false;
 bool recorrido8 = false;
 bool recorrido9 = false;
 
-// Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+// Declaración de medida de tiempo entre frames usado y el ultimo frame
+GLfloat deltaTime = 0.0f;	// Diferencia de tiempo entre frames
+GLfloat lastFrame = 0.0f;  	// Tiempo del Ultimo Frame
 
-// Keyframes
-float posX = PosIni.x, posY = PosIni.y, posZ = PosIni.z, rotCuerpo = 0, rotPies=0, rotCuerpoX=0, rotCuerpoZ=0;
+// Declaración de los key frames, primer key frame
+float posX = PosIni.x, posY = PosIni.y, posZ = PosIni.z, rotCuerpo = 0;
 
+// Declaración de los key frames, segundo key frame
+float posX2 = PosIni.x, posY2 = PosIni.y, posZ2 = PosIni2.z, rotBrazoDer = 0;
+
+//Definición de memoria de los key frames, valor 4
 #define MAX_FRAMES 4
+
+//Variables a usar de numero maximo de pasos y paso actual, uso para key frame
 int i_max_steps = 190;
 int i_curr_steps = 0;
+
+//Variables a usar de numero maximo de pasos y paso actual, uso para key frame 2
+int i_max_steps2 = 190;
+int i_curr_steps2 = 0;
+
+//Definición Estructural del Frame, para acceso a sus atributos
 typedef struct _frame
 {
 	//Variables para GUARDAR Key Frames
@@ -100,22 +138,49 @@ typedef struct _frame
 	float incX;		//Variable para IncrementoX
 	float incY;		//Variable para IncrementoY
 	float incZ;		//Variable para IncrementoZ
-	float rotCuerpo;
-	float rotCuerpoX;
-	float rotCuerpoZ;
-	float rotPies;
-	float rotInc;
-	float rotInc2;
-	float rotInc3;
-	float rotInc4;
+	float rotCuerpo; //Variable para Rotación de Cuerpo
+	float rotInc; //Variable para guardar rotación 
 
 }FRAME;
 
+//Definición Estructural del Frame 2, para acceso a sus atributos
+typedef struct _frame2
+{
+	//Variables para GUARDAR Key Frames
+	float posX2;		//Variable para PosicionX
+	float posY2;		//Variable para PosicionY
+	float posZ2;		//Variable para PosicionZ
+	float incX2;		//Variable para IncrementoX
+	float incY2;		//Variable para IncrementoY
+	float incZ2;		//Variable para IncrementoZ
+	float rotBrazoDer; //Variable para guardar rotación de brazos
+	float rotInc2;	//Variable para guardar incremento de brazos
+
+}FRAME2;
+
+/*
+* Declaración de arreglo Key Frame con tamaño 4
+* Variable para introducir los datos de posición e interpolación al frame
+* Bandera de activación de animación
+* Indice de arreglo para recorrido
+*/
 FRAME KeyFrame[MAX_FRAMES];
 int FrameIndex = 0;			//introducir datos
 bool play = false;
 int playIndex = 0;
 
+/*
+* Declaración de arreglo Key Frame 2 con tamaño 4
+* Variable para introducir los datos de posición e interpolación al frame
+* Bandera de activación de animación
+* Indice de arreglo para recorrido
+*/
+FRAME2 KeyFrame2[MAX_FRAMES];
+int FrameIndex2 = 0;			//introducir datos
+bool play2 = false;
+int playIndex2 = 0;
+
+//Areglo de los vertices para dibujo de cubo de iluminación
 float vertices[] = {
 	 -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -161,68 +226,102 @@ float vertices[] = {
 };
 
 
-
+//Declaración de model de luz
 glm::vec3 Light1 = glm::vec3(0);
 
-
+//Función para salvar los frames
 void saveFrame(void)
 {
-
+	//Imprime el numero de frame almacenado
 	printf("frameindex %d\n", FrameIndex);
 
+	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
 	KeyFrame[FrameIndex].posX = posX;
 	KeyFrame[FrameIndex].posY = posY;
 	KeyFrame[FrameIndex].posZ = posZ;
 
 	KeyFrame[FrameIndex].rotCuerpo= rotCuerpo;
-	KeyFrame[FrameIndex].rotPies = rotPies;
-	KeyFrame[FrameIndex].rotCuerpoX = rotCuerpoX;
-	KeyFrame[FrameIndex].rotCuerpoZ = rotCuerpoZ;
 
 	FrameIndex++;
 }
 
+//Función para salvar los frames
+void saveFrame2(void)
+{
+	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
+	printf("frameindex %d\n", FrameIndex2);
+
+	KeyFrame2[FrameIndex2].posX2 = posX2;
+	KeyFrame2[FrameIndex2].posY2 = posY2;
+	KeyFrame2[FrameIndex2].posZ2 = posZ2;
+
+	KeyFrame2[FrameIndex2].rotBrazoDer = rotBrazoDer;
+
+
+	FrameIndex2++;
+}
+
+//Función para reiniciar posición inicial de objeto de frame 1
 void resetElements(void)
 {
+	//Variable regresando la posición inicial almacenada en el frame arreglo de posición 0
 	posX = KeyFrame[0].posX;
 	posY = KeyFrame[0].posY;
 	posZ = KeyFrame[0].posZ;
 
 	rotCuerpo = KeyFrame[0].rotCuerpo;
-	rotCuerpoX = KeyFrame[0].rotCuerpoX;
-	rotCuerpoZ = KeyFrame[0].rotCuerpoZ;
-	rotPies = KeyFrame[0].rotPies;
+}
+
+//Función para reiniciar posición inicial de objeto
+void resetElements2(void)
+{
+	//Variable regresando la posición inicial almacenada en el frame arreglo de posición 0
+	posX2 = KeyFrame2[0].posX2;
+	posY2 = KeyFrame2[0].posY2;
+	posZ2 = KeyFrame2[0].posZ2;
+
+	rotBrazoDer = KeyFrame2[0].rotBrazoDer;
 
 }
 
+//Función de calculo de interpolación para realizar la animación y su velocidad de incremento, siendo lineal.
 void interpolation(void)
 {
+	
+	KeyFrame[playIndex].incX = (KeyFrame[playIndex + 1].posX - KeyFrame[playIndex].posX) / i_max_steps; //Incremento en X
+	KeyFrame[playIndex].incY = (KeyFrame[playIndex + 1].posY - KeyFrame[playIndex].posY) / i_max_steps; //Incremento en Y
+	KeyFrame[playIndex].incZ = (KeyFrame[playIndex + 1].posZ - KeyFrame[playIndex].posZ) / i_max_steps; //Incremento en Z
 
-	KeyFrame[playIndex].incX = (KeyFrame[playIndex + 1].posX - KeyFrame[playIndex].posX) / i_max_steps;
-	KeyFrame[playIndex].incY = (KeyFrame[playIndex + 1].posY - KeyFrame[playIndex].posY) / i_max_steps;
-	KeyFrame[playIndex].incZ = (KeyFrame[playIndex + 1].posZ - KeyFrame[playIndex].posZ) / i_max_steps;
+	KeyFrame[playIndex].rotInc = (KeyFrame[playIndex + 1].rotCuerpo - KeyFrame[playIndex].rotCuerpo) / i_max_steps; //Incremeneto en rotación de objeto
 
-	KeyFrame[playIndex].rotInc = (KeyFrame[playIndex + 1].rotCuerpo - KeyFrame[playIndex].rotCuerpo) / i_max_steps;
-	KeyFrame[playIndex].rotInc2= (KeyFrame[playIndex + 1].rotCuerpoX - KeyFrame[playIndex].rotCuerpoX) / i_max_steps;
-	KeyFrame[playIndex].rotInc3= (KeyFrame[playIndex + 1].rotCuerpoZ - KeyFrame[playIndex].rotCuerpoZ) / i_max_steps;
-	KeyFrame[playIndex].rotInc4 = (KeyFrame[playIndex + 1].rotPies - KeyFrame[playIndex].rotPies) / i_max_steps;
 }
 
+//Función de calculo de interpolación para realizar la animación y su velocidad de incremento, siendo lineal.
+void interpolation2(void)
+{
+
+	KeyFrame2[playIndex2].incX2 = (KeyFrame2[playIndex2 + 1].posX2 - KeyFrame2[playIndex2].posX2) / i_max_steps2; //Incremento en X
+	KeyFrame2[playIndex2].incY2 = (KeyFrame2[playIndex2 + 1].posY2 - KeyFrame2[playIndex2].posY2) / i_max_steps2; //Incremento en Y
+	KeyFrame2[playIndex2].incZ2 = (KeyFrame2[playIndex2 + 1].posZ2 - KeyFrame2[playIndex2].posZ2) / i_max_steps2; //Incremento en Z
+
+	KeyFrame2[playIndex2].rotInc2 = (KeyFrame2[playIndex2 + 1].rotBrazoDer - KeyFrame2[playIndex2].rotBrazoDer) / i_max_steps2; // Incremeneto en rotación de objeto
+}
 
 int main()
 {
-	// Init GLFW
+	// Inicialización de  GLFW
 	glfwInit();
-	// Set all the required options for GLFW
+	// Seteamos los valores requeridos por GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	// Create a GLFWwindow object that we can use for GLFW's functions
+	// Creamos el objeto de ventana por medio de la funcion de glfw, recibiendo resolución y nombre de ventana.
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Picapiedras", nullptr, nullptr);
 
+	//Comprobación de creación de venta correctamente.
 	if (nullptr == window)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -231,94 +330,102 @@ int main()
 		return EXIT_FAILURE;
 	}
 
+	//Cambio de contexto anterior a nuevo
 	glfwMakeContextCurrent(window);
 
+	//Recibimos el tamaño de buffer de ventana
 	glfwGetFramebufferSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
 
-	// Set the required callback functions
+	// Inicializamos las funciones de callback de mouse y teclado 
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetCursorPosCallback(window, MouseCallback);
 
-	// GLFW Options
+	// Opciones de GLFW 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
+	// Inicializamos para recibir funciones de punteros y extensiones
 	glewExperimental = GL_TRUE;
-	// Initialize GLEW to setup the OpenGL Function pointers
+	// Inicializamos GLEW para los punteros y verificamos que se haya creado correctamente
 	if (GLEW_OK != glewInit())
 	{
 		std::cout << "Failed to initialize GLEW" << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	// Define the viewport dimensions
+	// Definimos las dimensiones del viewport
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glEnable(GL_DEPTH_TEST);
 
+	/*
+	* Inicializamos los shaders a usar
+	* Shader para iluminación
+	* Shader para iluminación
+	* Shader de Skybox
+	*/
 	Shader lightingShader("Shaders/lighting.vs", "Shaders/lighting.frag");
 	Shader lampShader("Shaders/lamp.vs", "Shaders/lamp.frag");
 	Shader SkyBoxshader("Shaders/SkyBox.vs", "Shaders/SkyBox.frag");
 
-	//Pedro
-	//Cabeza
+	//Pedro Picapiedra
+	//Modelo de la Cabeza
 	Model CabezaP((char*)"Models/Obj/Models/Pedro/Cabeza/Cabeza.obj");
-	//Cuerpo
+	//Modelo de el Cuerpo
 	Model CuerpoP((char*)"Models/Obj/Models/Pedro/Cuerpo/CuerpoP.obj");
-	//BrazoIzq
+	//Modelo del Brazo Izquierdo
 	Model BrazoIzq((char*)"Models/Obj/Models/Pedro/BrazoIzq/BrazoIzq.obj");
-	//BrazoDer
+	//Modelo del Brazo Derecho
 	Model BrazoDer((char*)"Models/Obj/Models/Pedro/BrazoDer/BrazoDer.obj");
-	//Pies
+	//Modelo de Pies
 	Model PiesP((char*)"Models/Obj/Models/Pedro/Pies/Pies.obj");
 
 
-	//Dinosaurio
+	//Modelo de Dinosaurio
 	Model Dino((char*)"Models/Obj/Models/Dragon/Dragon.obj");	
 
-	//Animacion Cielo
+	//Shader creado para animacion del agua
 	Shader Anim("Shaders/anim.vs", "Shaders/anim.frag");
-	//Cielo
+	//Modelo de el agua
 	Model Agua((char*)"Models/Obj/Models/Agua/Agua.obj");
-	//Dinosaurio
+	//Modelo del dinosaurio cuerpo
 	Model DinosaurioCuerpo((char*)"Models/Obj/Models/DinoPerson/Cuerpo/Cuerpo.obj");
-	//Dinosaurios
+	//Modelo del dinosaurio pies
 	Model DinosaurioPies((char*)"Models/Obj/Models/DinoPerson/Pies/Pies.obj");
-	//Terreno
+	//Modelo del piso
 	Model Piso((char*)"Models/Obj/Models/Piso/Piso.obj");
-	//Fachada
+	//Modelo de la fachada
 	Model Fachada((char*)"Models/Obj/Models/Fachada/Fachada.obj");
-	//Planta 1
+	//Modelo de Planta 1
 	Model Planta1((char*)"Models/Obj/Models/Planta1/Planta1.obj");
-	//Planta 2
+	//Modelo de Planta 2
 	Model Planta2((char*)"Models/Obj/Models/Planta2/Planta2.obj");
-	//Planta 3
+	//Modelo de Planta 3
 	Model Planta3((char*)"Models/Obj/Models/Planta3/Planta3.obj");
-	//Planta 4
+	//Modelo de Planta 4
 	Model Planta4((char*)"Models/Obj/Models/Planta4/Planta4.obj");
-	//Planta 5
+	//Modelo de Planta 5
 	Model Planta5((char*)"Models/Obj/Models/Planta5/Planta5.obj");
-	//Planta 6
+	//Modelo de Planta 6
 	Model Planta6((char*)"Models/Obj/Models/Planta6/Planta6.obj");
-	//Sillon1
+	//Modelo de Sillon1
 	Model Sillon1((char*)"Models/Obj/Models/Sillon1/Sillon.obj");
-	//Sillon2
+	//Modelo de Sillon2
 	Model Sillon2((char*)"Models/Obj/Models/Sillon2/Sillon2.obj");
-	//Cojines
+	//Modelo de Cojines
 	Model Cojines((char*)"Models/Obj/Models/Cojines/Cojines.obj");
-	//Mesa
+	//Modelo de Mesa
 	Model Mesa((char*)"Models/Obj/Models/Mesa/Mesa.obj");
-	//Mesa2
+	//Modelo de Mesa2
 	Model Mesa2((char*)"Models/Obj/Models/Mesa2/Mesa2.obj");
-	//TV
+	//Modelo de TV
 	Model TV((char*)"Models/Obj/Models/TV/TV.obj");
-	//Tapete
+	//Modelo de Tapete
 	Model Tapete((char*)"Models/Obj/Models/Tapete/Tapete.obj");
-	//Libros
+	//Modelo de Libros
 	Model Libros((char*)"Models/Obj/Models/Libros/Libros.obj");
 
 
-
+	//Ciclo creado para inicializar valor seguro 0 todos los elementos de la estructura de frame
 	for (int i = 0; i < MAX_FRAMES; i++)
 	{
 		KeyFrame[i].posX = 0;
@@ -326,19 +433,22 @@ int main()
 		KeyFrame[i].incY = 0;
 		KeyFrame[i].incZ = 0;
 		KeyFrame[i].rotCuerpo= 0;
-		KeyFrame[i].rotCuerpoX = 0;
-		KeyFrame[i].rotCuerpoZ = 0;
-		KeyFrame[i].rotPies = 0;
 		KeyFrame[i].rotInc = 0;
-		KeyFrame[i].rotInc2 = 0;
-		KeyFrame[i].rotInc3 = 0;
-		KeyFrame[i].rotInc4 = 0;
+	}
 
+	//Ciclo creado para inicializar valor seguro 0 todos los elementos de la estructura de frame 2
+	for (int i = 0; i < MAX_FRAMES; i++)
+	{
+		KeyFrame2[i].posX2 = 0;
+		KeyFrame2[i].incX2 = 0;
+		KeyFrame2[i].incY2 = 0;
+		KeyFrame2[i].incZ2 = 0;
+		KeyFrame2[i].rotBrazoDer = 0;
+		KeyFrame2[i].rotInc2 = 0;
 	}
 
 
-
-
+	//Arreglo de vertices para dibujo de cubo para skybox
 	GLfloat skyboxVertices[] = {
 		// Positions
 		-1.0f,  1.0f, -1.0f,
@@ -384,31 +494,6 @@ int main()
 		1.0f, -1.0f,  1.0f
 	};
 
-	GLuint indices[] =
-	{  // Note that we start from 0!
-		0,1,2,3,
-		4,5,6,7,
-		8,9,10,11,
-		12,13,14,15,
-		16,17,18,19,
-		20,21,22,23,
-		24,25,26,27,
-		28,29,30,31,
-		32,33,34,35
-	};
-
-	glm::vec3 cubePositions[] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
-	glm::vec3(2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f, -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3(2.4f, -0.4f, -3.5f),
-	glm::vec3(-1.7f,  3.0f, -7.5f),
-	glm::vec3(1.3f, -2.0f, -2.5f),
-	glm::vec3(1.5f,  2.0f, -2.5f),
-	glm::vec3(1.5f,  0.2f, -1.5f),
-	glm::vec3(-1.3f,  1.0f, -1.5f)
-	};
 
 	// First, set the container's VAO (and VBO)
 	GLuint VBO, VAO;
@@ -417,14 +502,15 @@ int main()
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	// Position attribute
+	
+	//Atributo de Posición
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	// normal attribute
+	// Atributo para la normal 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	// Set texture units
+	// Inicilización de unidad de textura
 	lightingShader.Use();
 	glUniform1i(glGetUniformLocation(lightingShader.Program, "diffuse"), 0);
 	glUniform1i(glGetUniformLocation(lightingShader.Program, "specular"), 1);
@@ -469,7 +555,7 @@ int main()
 		DoMovement();
 		animacion();
 		animacion2();
-
+		animacion3();
 		// Clear the colorbuffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -549,58 +635,19 @@ int main()
 		view = camera.GetViewMatrix();
 		glm::mat4 model(1);
 		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
 		model = glm::rotate(model, glm::radians(-rotCuerpo), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		DinosaurioCuerpo.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::translate(model, glm::vec3(posX, posY, posZ));
+		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
+		//model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		DinosaurioPies.Draw(lightingShader);
 
 		glBindVertexArray(0);
 
-		//Pedro
-		view = camera.GetViewMatrix();
-		//glm::mat4 model(1);
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::rotate(model, glm::radians(-rotCuerpo), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		CabezaP.Draw(lightingShader);
-
-		view = camera.GetViewMatrix();
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		CuerpoP.Draw(lightingShader);
-
-		view = camera.GetViewMatrix();
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		BrazoDer.Draw(lightingShader);
-
-		view = camera.GetViewMatrix();
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		BrazoIzq.Draw(lightingShader);
-
-		view = camera.GetViewMatrix();
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		PiesP.Draw(lightingShader);
-
-		glBindVertexArray(0);
 
 		//Dragon
 		view = camera.GetViewMatrix();
@@ -658,6 +705,43 @@ int main()
 		glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1.0, 1.0, 1.0, 1.0);
 		glBindVertexArray(0);
 
+		//Pedro
+		view = camera.GetViewMatrix();
+		//glm::mat4 model(1);
+		//model = glm::translate(model, glm::vec3(posX, posY, posZ));
+		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
+		//model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		CabezaP.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();
+		//model = glm::translate(model, glm::vec3(posX, posY, posZ));
+		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
+		//model = glm::rotate(model, glm::radians(-rotBrazoIzq), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoP.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();
+		//model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
+		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
+		//model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		PiesP.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();
+		model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
+		model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoDer.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();
+		model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoIzq.Draw(lightingShader);
+
+		glBindVertexArray(0);
+
+
 		Anim.Use();
 		tiempo = glfwGetTime();
 		modelLoc = glGetUniformLocation(Anim.Program, "model");
@@ -708,6 +792,7 @@ int main()
 
 
 
+
 		// Draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
 		SkyBoxshader.Use();
@@ -745,13 +830,20 @@ int main()
 
 void Sonido()
 {
-	PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
+	//PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
 }
 
 void Sonido2()
 {
 
 	PlaySound(TEXT("ambiente.wav"), NULL, SND_LOOP | SND_ASYNC);
+
+}
+
+void Sonido3()
+{
+
+	PlaySound(TEXT("gol.wav"), NULL, SND_ASYNC);
 
 }
 
@@ -827,6 +919,18 @@ void DoMovement()
 
 	}
 
+	if (keys[GLFW_KEY_3])
+	{
+		if (rotBrazoDer< 20.0)
+			rotBrazoDer += 1.0f;
+	}
+
+	if (keys[GLFW_KEY_4])
+	{
+		if (rotBrazoDer > 0)
+			rotBrazoDer -= 1.0f;
+
+	}
 
 }
 
@@ -954,10 +1058,51 @@ void animacion2()
 			posZ += KeyFrame[playIndex].incZ;
 
 			rotCuerpo += KeyFrame[playIndex].rotInc;
-			rotCuerpoX += KeyFrame[playIndex].rotInc3;
-			rotCuerpoZ += KeyFrame[playIndex].rotInc4;
-			rotPies += KeyFrame[playIndex].rotInc2;
+
 			i_curr_steps++;
+		}
+
+	}
+}
+
+void animacion3()
+{
+
+	//Movimiento del personaje
+
+	if (play2)
+	{
+		if (i_curr_steps2 >= i_max_steps2) //end of animation between frames?
+		{
+			playIndex2++;
+			if (playIndex2 == 1)
+			{
+				Sonido3();
+			}
+			if (playIndex2 > FrameIndex2 - 2)	//end of total animation?
+			{
+				printf("termina anim\n");
+				Sonido2();
+				playIndex2 = 0;
+				play2 = false;
+			}
+			else //Next frame interpolations
+			{
+				i_curr_steps2 = 0; //Reset counter
+								  //Interpolation
+				interpolation2();
+			}
+		}
+		else
+		{
+			//Draw animation
+			posX2 += KeyFrame2[playIndex2].incX2;
+			posY2 += KeyFrame2[playIndex2].incY2;
+			posZ2 += KeyFrame2[playIndex2].incZ2;
+
+			rotBrazoDer += KeyFrame2[playIndex2].rotInc2;
+
+			i_curr_steps2++;
 		}
 
 	}
@@ -1022,6 +1167,34 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 		if (FrameIndex < MAX_FRAMES)
 		{
 			saveFrame();
+		}
+
+	}
+	if (keys[GLFW_KEY_P])
+	{
+		if (play2 == false && (FrameIndex2 > 1))
+		{
+
+			resetElements2();
+			//First Interpolation				
+			interpolation2();
+
+			play2 = true;
+			playIndex2 = 0;
+			i_curr_steps2 = 0;
+		}
+		else
+		{
+			play2 = false;
+		}
+
+	}
+
+	if (keys[GLFW_KEY_O])
+	{
+		if (FrameIndex2 < MAX_FRAMES)
+		{
+			saveFrame2();
 		}
 
 	}
