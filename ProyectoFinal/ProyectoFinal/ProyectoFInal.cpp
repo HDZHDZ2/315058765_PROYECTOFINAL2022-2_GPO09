@@ -14,25 +14,25 @@
 #include <Windows.h>
 #include <mmsystem.h>
 
-// GLEW
+// Libreria de GLEW
 #include <GL/glew.h>
 
-// GLFW
+// Libreria de GLFW
 #include <GLFW/glfw3.h>
 
-// Other Libs
+// Libreria de std image.h
 #include "stb_image.h"
 
-// GLM Mathematics
+// Libreria GLM Mathematics
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//Load Models
+//Libreria de Load Models
 #include "SOIL2/SOIL2.h"
 
 
-// Other includes
+// Libreria creadas
 #include "Shader.h"
 #include "Camera.h"
 #include "Model.h"
@@ -495,7 +495,7 @@ int main()
 	};
 
 
-	// First, set the container's VAO (and VBO)
+	// Inicialización de las funciones VAO y VBO
 	GLuint VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -503,10 +503,10 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
-	//Atributo de Posición
+	//Establecemos el atributo de posición
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	// Atributo para la normal 
+	//Establecemos el atributo para la normal 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
@@ -516,7 +516,7 @@ int main()
 	glUniform1i(glGetUniformLocation(lightingShader.Program, "specular"), 1);
 
 
-	//SkyBox
+	//Inicialización del SkyBox
 	GLuint skyboxVBO, skyboxVAO;
 	glGenVertexArrays(1, &skyboxVAO);
 	glGenBuffers(1, &skyboxVBO);
@@ -526,7 +526,7 @@ int main()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 
-	//load textures
+	//Carga de imagenes para texturizar el skybox
 	vector<const GLchar*> faces;
 	faces.push_back("SkyBox/right.tga");
 	faces.push_back("SkyBox/left.tga");
@@ -536,58 +536,52 @@ int main()
 	faces.push_back("SkyBox/front.tga");
 
 	GLuint cubemapTexture = TextureLoading::LoadCubemap(faces);
-
+	//Creación de proyección en perspectiva
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 100.0f);
 
+	//Inicialización de funciones de sonido ambiente e intro
 	Sonido();
 	Sonido2();
-	// Game loop
+	// Ciclo De ejecución continua
 	while (!glfwWindowShouldClose(window))
 	{
 
-		// Calculate deltatime of current frame
+		// Calculamos el ultimo frame y su diferentecía entre el actual y el ultimo
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
+		// Revisamos la inicialización de eventos para animaciones constantes y revisamos banderas
 		glfwPollEvents();
 		DoMovement();
 		animacion();
 		animacion2();
 		animacion3();
-		// Clear the colorbuffer
+		// Limpiamos el buffer de ejecución y color
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//// OpenGL options
-		//glEnable(GL_DEPTH_TEST);
-
-
-
-		//Load Model
-
-
-		// Use cooresponding shader when setting uniforms/drawing objects
+		// Declaramos el shader de iluminación a inicar uso
 		lightingShader.Use();
 		GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
+		//Iniciamos su posicionamiento
 		glUniform3f(viewPosLoc, camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
 
 
-		// Directional light
+		// Establecemos la iluminación direccional, dedsde dirección, escular, ambiental y difusa.
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"), 0.1f, 0.1f, 0.1f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.1f, 0.1f, 0.1f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"), 0.4f, 0.4f, 0.4f);
 
 
-		// Point light 1
+		// Vector de Iluminación de punto
 		glm::vec3 lightColor;
 		lightColor.x = abs(sin(glfwGetTime() * Light1.x));
 		lightColor.y = abs(sin(glfwGetTime() * Light1.y));
 		lightColor.z = sin(glfwGetTime() * Light1.z);
 
-
+		//Inicialización de pposición, e iluminación desde el arreglo de posiciones
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].position"), pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].ambient"), 1.0f, 1.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].diffuse"), 1.0f, 1.0f, 0.0f);
@@ -596,7 +590,7 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.7f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
 
-		// SpotLight
+		// Iniciaización de posición de spotlight, usado como animación de encedido y apagado de TV
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), 1.5f, 0.82f, 1.18f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.direction"), -5.0f, 0.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.ambient"), anim1, anim1, anim1);
@@ -608,199 +602,249 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.cutOff"), glm::cos(glm::radians(12.5f)));
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.outerCutOff"), glm::cos(glm::radians(15.0f)));
 
-		// Set material properties
+		// Iniciamos la propiedad de brillo sobre material
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 16.0f);
 
-		// Create camera transformations
+		// Creamos la creación de camara
 		glm::mat4 view;
 		view = camera.GetViewMatrix();
 
-		// Get the uniform locations
+		// Iniciamos la prespectica de model, view y proyección 
 		GLint modelLoc = glGetUniformLocation(lightingShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(lightingShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(lightingShader.Program, "projection");
 
-		// Pass the matrices to the shader
+		// Realizamos la matreiz para la vista y proyección
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		glBindVertexArray(VAO);
 		glBindVertexArray(VAO);
 		glm::mat4 tmp = glm::mat4(1.0f); //Temp
 
+		//Carga de modelo de personaje de dinosaurio
+		view = camera.GetViewMatrix();//establecemos la vista 
+		glm::mat4 model(1);//Declaración de model
+		model = glm::translate(model, glm::vec3(posX, posY, posZ));//Transformación de traslación a posición inicial
+		model = glm::rotate(model, glm::radians(-rotCuerpo), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
+		DinosaurioCuerpo.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
+
+		view = camera.GetViewMatrix();//Establecemos vista
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos matriz de modelo
+		DinosaurioPies.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
+
+		glBindVertexArray(0);//Finalizamos vertex array
 
 
-		//Carga de modelo 
-		//Personaje
-		view = camera.GetViewMatrix();
-		glm::mat4 model(1);
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		model = glm::rotate(model, glm::radians(-rotCuerpo), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		DinosaurioCuerpo.Draw(lightingShader);
+		//Caragamos modelo del dragon volador
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		Dino.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+		glBindVertexArray(0);//Finalizamos vertex array
 
-		view = camera.GetViewMatrix();
-		//model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		//model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		DinosaurioPies.Draw(lightingShader);
-
-		glBindVertexArray(0);
-
-
-		//Dragon
-		view = camera.GetViewMatrix();
-		model = glm::mat4(1);
-		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
-		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		Dino.Draw(lightingShader);
-		glBindVertexArray(0);
-
-		//Carga de modelo 
-		view = camera.GetViewMatrix();
-		model = glm::mat4(1);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
-		Piso.Draw(lightingShader);
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//Cielo.Draw(lightingShader);
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//Montañas.Draw(lightingShader);
+		//Carga de modelo del piso
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		glUniform1i(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);//Ingresamos transparencia a objetos
+		Piso.Draw(lightingShader);//Dibujamos 
 	
-		//Modelo
+		//Envíamos Modelo de Fachada a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de fachada
 		Fachada.Draw(lightingShader);
+		//Envíamos Modelo de Planta1 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Planta1
 		Planta1.Draw(lightingShader);
+		//Envíamos Modelo de Planta2 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Planta1
 		Planta2.Draw(lightingShader);
+		//Envíamos Modelo de Planta3 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Planta3
 		Planta3.Draw(lightingShader);
+		//Envíamos Modelo de Planta4 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Planta4
 		Planta4.Draw(lightingShader);
+		//Envíamos Modelo de Planta5 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Planta5
 		Planta5.Draw(lightingShader);
+		//Envíamos Modelo de Planta6 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Planta6
 		Planta6.Draw(lightingShader);
+		//Envíamos Modelo de Sillon1 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Sillon1
 		Sillon1.Draw(lightingShader);
+		//Envíamos Modelo de Sillon2 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Sillon2
 		Sillon2.Draw(lightingShader);
+		//Envíamos Modelo de Cojines a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Cojines
 		Cojines.Draw(lightingShader);
+		//Envíamos Modelo de Mesa a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Mesa
 		Mesa.Draw(lightingShader);
+		//Envíamos Modelo de Mesa2 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Mesa2
 		Mesa2.Draw(lightingShader);
+		//Envíamos Modelo de TV a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de TV
 		TV.Draw(lightingShader);
+		//Envíamos Modelo de Tapete a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Tapete
 		Tapete.Draw(lightingShader);
+		//Envíamos Modelo de Libros a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Libros
 		Libros.Draw(lightingShader);
 
-		//glDisable(GL_BLEND); //Desactiva el canal alfa 
+		//Enviamos el color alpha
 		glUniform4f(glGetUniformLocation(lightingShader.Program, "colorAlpha"), 1.0, 1.0, 1.0, 1.0);
+		//Finalizamos vertex array
 		glBindVertexArray(0);
 
-		//Pedro
+		//Carga de Modelo Pedro Picapiedra
+		//Iniciamos Camara de vista
 		view = camera.GetViewMatrix();
-		//glm::mat4 model(1);
-		//model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		//model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));
+		//Enviamos modelo Cabeza de Pedro a la matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Cabeza
 		CabezaP.Draw(lightingShader);
 
+		//Iniciamos Camara de vista
 		view = camera.GetViewMatrix();
-		//model = glm::translate(model, glm::vec3(posX, posY, posZ));
-		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		//model = glm::rotate(model, glm::radians(-rotBrazoIzq), glm::vec3(0.0f, 0.0f, 1.0f));
+		//Enviamos modelo Cuerpo de Pedro a la matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Cuerpo
 		CuerpoP.Draw(lightingShader);
 
+		//Iniciamos Camara de vista
 		view = camera.GetViewMatrix();
-		//model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
-		//model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0));
-		//model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));
+		//Enviamos modelo Pies de Pedro a la matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Pies
 		PiesP.Draw(lightingShader);
 
+		//Iniciamos Camara de vista
 		view = camera.GetViewMatrix();
+		//Transformación de traslación al modelo
 		model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
+		//Transformación de rotación al modelo
 		model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));
+		//Enviamos modelo brazo de derecho de Pedro a la matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Brazo Derecho
 		BrazoDer.Draw(lightingShader);
 
+		//Iniciamos Camara de vista
 		view = camera.GetViewMatrix();
 		model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
+		//Enviamos modelo brazo de izquierdo de Pedro a la matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos el modelo de Brazo Izquierdo
 		BrazoIzq.Draw(lightingShader);
 
+		//Finalizamos vertex array
 		glBindVertexArray(0);
 
-
+		//Iniciamos el shader animación para uso
 		Anim.Use();
+		//Utilizamos el tiempo generado por procesador para animación
 		tiempo = glfwGetTime();
+		//Inicamos modelo, vista y proyección del modelo
 		modelLoc = glGetUniformLocation(Anim.Program, "model");
 		viewLoc = glGetUniformLocation(Anim.Program, "view");
 		projLoc = glGetUniformLocation(Anim.Program, "projection");
+		//Enviamos vista a la matriz de modelo
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		//Enviamos proyección a la matriz de modelo
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		//Enviamos modelo a la matriz de modelo
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Enviamos el tiempo del procesador a la matriz de modelo
 		glUniform1f(glGetUniformLocation(Anim.Program, "time"), tiempo);
+		//Inicializamos modelo de objeto agua
 		model = glm::mat4(1);
+		//Enviamos modelo de objeto
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//Dibujamos objeto con parametro de animación recibido
 		Agua.Draw(Anim);
-		
+		//Finalizamos vertex array
 		glBindVertexArray(0);
 
-		// Also draw the lamp object, again binding the appropriate shader
+		// Inicializamos uso de shader de iluminación
 		lampShader.Use();
 		
-		
-		// Get location objects for the matrices on the lamp shader (these could be different on a different shader)
+		//Inicializamos objeto de modelo, vista y proyección
 		modelLoc = glGetUniformLocation(lampShader.Program, "model");
 		viewLoc = glGetUniformLocation(lampShader.Program, "view");
 		projLoc = glGetUniformLocation(lampShader.Program, "projection");
 
-		// Set matrices
+		//Enviamos vista y proyección a la matriz
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		//Inicialización del modelo de iluminación
 		model = glm::mat4(1);
+		//Transformación de traslación en iluminación
 		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+		//Transformación de escalado en iluminación
+		model = glm::scale(model, glm::vec3(0.2f));
+		//Enviar modelo a matriz 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		// Draw the light object (using light's vertex attributes)
-
+		
+		
+		//Creación  de modelo de iluminación punto
 		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
 		model = glm::translate(model, pointLightPositions[0]);
-		model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f)); 
+		//Enviar modelo a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		//Creación de modelo de iluminación punto
 		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
 		model = glm::translate(model, pointLightPositions[1]);
-		model = glm::scale(model, glm::vec3(0.2f,0.5f,0.7f)); // Make it a smaller cube
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f,0.5f,0.7f)); 
+		//Enviar modelo a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
-
-
-
-		// Draw skybox as last
-		glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
+		// Dibujamos al ultimo el skybox
+		glDepthFunc(GL_LEQUAL);
+		//Iniciamos shader de sky box para su uso
 		SkyBoxshader.Use();
-		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
+		//Movemos el componente de vista de la matriz
+		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+		//Enviamos la vista y proyección a la matriz 
 		glUniformMatrix4fv(glGetUniformLocation(SkyBoxshader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(SkyBoxshader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		// skybox cube
+		// Dibujamos el cubo para la asignación de skybox
 		glBindVertexArray(skyboxVAO);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
@@ -811,16 +855,16 @@ int main()
 
 
 
-		// Swap the screen buffers
+		// intercambiamos los buffer de ventana
 		glfwSwapBuffers(window);
 	}
 
+	//Eliminamos memoria de skybox y objetos
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &skyboxVAO);
 	glDeleteBuffers(1, &skyboxVBO);
-	// Terminate GLFW, clearing any resources allocated by GLFW.
-	// Terminate GLFW, clearing any resources allocated by GLFW.
+	// Terminamos GLFW para limpiar cualquier recurso almacenado
 	glfwTerminate();
 
 
@@ -828,11 +872,13 @@ int main()
 	return 0;
 }
 
+//Funcion de Insertado de sonido de intro
 void Sonido()
 {
 	//PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
 }
 
+//Funcion de Insertado de sonido de ambientación
 void Sonido2()
 {
 
@@ -840,6 +886,7 @@ void Sonido2()
 
 }
 
+//Función de insertado de sonido de animación gol
 void Sonido3()
 {
 
@@ -847,18 +894,19 @@ void Sonido3()
 
 }
 
-// Moves/alters the camera positions based on user input
+// Funciónde movimiento de teclas
 void DoMovement()
 
 {
 
-	// Camera controls
+	// Control de camara para enfrente
 	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
 	{
 		camera.ProcessKeyboard(FORWARD, deltaTime);
 
 	}
 
+	//Control de camara para atras
 	if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])
 	{
 		camera.ProcessKeyboard(BACKWARD, deltaTime);
@@ -866,6 +914,7 @@ void DoMovement()
 
 	}
 
+	//Control de camara para izquierda
 	if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT])
 	{
 		camera.ProcessKeyboard(LEFT, deltaTime);
@@ -873,6 +922,7 @@ void DoMovement()
 
 	}
 
+	//Control de camara para derecha
 	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT])
 	{
 		camera.ProcessKeyboard(RIGHT, deltaTime);
@@ -880,31 +930,20 @@ void DoMovement()
 
 	}
 
+	//Control de iniciado de animación de movimiento de dragon
 	if (keys[GLFW_KEY_I])
 	{
 		circuito = true;
 	}
 
-	if (keys[GLFW_KEY_SPACE])
-	{
-		active = !active;
-		if (active)
-		{
-			Light1 = glm::vec3(1.0f, 1.0f, 0.0f);
-		}
-		else
-		{
-			Light1 = glm::vec3(0);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
-		}
-	}
-
+	//Control de pausado de movimiento de dragon
 	if (keys[GLFW_KEY_O])
 	{
 		circuito = false;
 	}
 
 
-
+	//Movimiento de cuerpo de dinosaurio positivo
 	if (keys[GLFW_KEY_1])
 	{
 		if (rotCuerpo < 45.0)
@@ -912,6 +951,7 @@ void DoMovement()
 
 	}
 
+	//Movimiento de cuerpo de dinosaurio negativo
 	if (keys[GLFW_KEY_2])
 	{
 		if (rotCuerpo > -1)
@@ -919,12 +959,14 @@ void DoMovement()
 
 	}
 
+	//Movimiento de brazos de Pedro positivo
 	if (keys[GLFW_KEY_3])
 	{
 		if (rotBrazoDer< 20.0)
 			rotBrazoDer += 1.0f;
 	}
 
+	//Movimiento de brazos de Pedro negativo
 	if (keys[GLFW_KEY_4])
 	{
 		if (rotBrazoDer > 0)
@@ -938,85 +980,122 @@ void DoMovement()
 /// Animación Dinosaurio
 void animacion()
 {
+	//Bandera de activación
 	if (circuito)
 	{
+		//Bandera de activación recorrido 1
 		if (recorrido1)
 		{
+			//Desplazamiento en X
 			movKitX += 0.1f;
+			//Bandera de limite de 20 unidades
 			if (movKitX > 20)
 			{
+				//Cambio de recorrido
 				recorrido1 = false;
 				recorrido2 = true;
 			}
 		}
+		//Bandera de activación recorrido 2
 		if (recorrido2)
 		{
+			//Cambio de dirección
 			rotKit += 1;
+			//Bandera de limite de 90 grados
 			if (rotKit > 90)
 			{
+				//Cambio de recorrido
 				recorrido2 = false;
 				recorrido3 = true;
 			}
 		}
+		//Bandera de activación recorrido 3
 		if (recorrido3)
 		{
+			//Desplazamiento en Z negativo
 			movKitZ -= 0.1f;
+			//Bandera de limite de 20 unidades menos
 			if (movKitZ < -20)
 			{
+				//Cambio de recorrido
 				recorrido3 = false;
 				recorrido4 = true;
 			}
 		}
+		//Bandera de activación recorrido 4
 		if (recorrido4)
 		{
+			//Cambio de dirección
 			rotKit += 1;
+			//Bandera de limite en 180 grados
 			if (rotKit > 180)
 			{
+				//Cambio de recorrido
 				recorrido4 = false;
 				recorrido5 = true;
 			}
 		}
+		//Bandera de activación recorrido 5
 		if (recorrido5)
 		{
+			//Desplazamiento en X negativo
 			movKitX -= 0.1f;
+			//Bandera de limite de 20 unidades menos
 			if (movKitX < -20)
 			{
+				//Cambio de recorrido
 				recorrido5 = false;
 				recorrido6 = true;
 			}
 		}
+		//Bandera de activación recorrido 6
 		if (recorrido6)
 		{
+			//Cambio de dirección
 			rotKit += 1;
+			//Bandera de limite en 270 grados
 			if (rotKit > 270)
 			{
+				//Cambio de recorrido
 				recorrido6 = false;
 				recorrido7 = true;
 			}
 		}
+		//Bandera de activación recorrido 7
 		if (recorrido7)
 		{
+			//Desplazamiento en Z positivo
 			movKitZ += 0.1f;
+			//Bandera de limite de 0 unidades
 			if (movKitZ > 0)
 			{
+				//Cambio de recorrido
 				recorrido7 = false;
 				recorrido8 = true;
 			}
 		}
+		//Bandera de activación recorrido 8
 		if (recorrido8)
 		{
+			//Cambio de dirección
 			rotKit += 1;
+			//Bandera de limite en 360 grados
 			if (rotKit > 360)
 			{
+				//Cambio de recorrido
 				recorrido8 = false;
 				recorrido9 = true;
 			}
 		}
+		//Bandera de activación recorrido 9
 		if (recorrido9)
 		{
+			//Desplazamiento en X positivo
 			movKitX += 0.1f;
+			//Bandera de limite de 0 unidades
 			if (movKitX > 0)
 			{
+				//Cambio de recorrido
 				recorrido9 = false;
 				rotKit = 0;
 				recorrido1 = true;
@@ -1026,33 +1105,37 @@ void animacion()
 	}
 }
 	
-
+//Funcion de Animacion 2 por key frames
 void animacion2()
 {
 
-	//Movimiento del personaje
-
+	//Bandera de play
 	if (play)
 	{
-		if (i_curr_steps >= i_max_steps) //end of animation between frames?
+		//Bandera de pasos actaules mayor a pasos maximos
+		if (i_curr_steps >= i_max_steps) 
 		{
+			//Incremento de indice de actual
 			playIndex++;
-			if (playIndex > FrameIndex - 2)	//end of total animation?
+			//Bandera indice actual al indice almacenado no sea mayor, termina animación
+			if (playIndex > FrameIndex - 2)	
 			{
 				printf("termina anim\n");
+				//Inicializamos a valores iniciales 
 				playIndex = 0;
 				play = false;
 			}
-			else //Next frame interpolations
+			else 
 			{
-				i_curr_steps = 0; //Reset counter
-								  //Interpolation
+				//Reiniciamos contador
+				i_curr_steps = 0; 
+				//interpolamos para realizar 
 				interpolation();
 			}
 		}
 		else
 		{
-			//Draw animation
+			//Recorrido de posición 
 			posX += KeyFrame[playIndex].incX;
 			posY += KeyFrame[playIndex].incY;
 			posZ += KeyFrame[playIndex].incZ;
@@ -1065,37 +1148,44 @@ void animacion2()
 	}
 }
 
+//Funcion de Animacion 3 por key frames
 void animacion3()
 {
-
-	//Movimiento del personaje
-
+	//Bandera de play
 	if (play2)
 	{
-		if (i_curr_steps2 >= i_max_steps2) //end of animation between frames?
+		//Bandera de pasos actaules mayor a pasos maximos
+		if (i_curr_steps2 >= i_max_steps2) 
 		{
+			//Incremento de indice de actual
 			playIndex2++;
+			//Bandera de posición 2
 			if (playIndex2 == 1)
 			{
+				//Función de sonido 3, sonido de gol
 				Sonido3();
 			}
-			if (playIndex2 > FrameIndex2 - 2)	//end of total animation?
+			//Bandera indice actual al indice almacenado no sea mayor, termina animación
+			if (playIndex2 > FrameIndex2 - 2)	
 			{
 				printf("termina anim\n");
+				//Función de sonido 2, sonido de ambiente
 				Sonido2();
+				//Inicializamos a valores iniciales 
 				playIndex2 = 0;
 				play2 = false;
 			}
-			else //Next frame interpolations
+			else 
 			{
-				i_curr_steps2 = 0; //Reset counter
-								  //Interpolation
+				//Reiniciamos contador
+				i_curr_steps2 = 0; 
+				//interpolamos para realizar 
 				interpolation2();
 			}
 		}
 		else
 		{
-			//Draw animation
+			//Recorrido de posición 
 			posX2 += KeyFrame2[playIndex2].incX2;
 			posY2 += KeyFrame2[playIndex2].incY2;
 			posZ2 += KeyFrame2[playIndex2].incZ2;
@@ -1128,13 +1218,17 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 		}
 	}
 
+	//Tecla M activación de animación de luz de TV
 	if (keys[GLFW_KEY_M])
 	{
+		//Contador
 		bandera = bandera + 1;
+		//Bandera para apagado
 		if (bandera%2==0)
 		{
 			anim1 = 0.0f;
 		}
+		//Caso contrario Enciende la luz
 		else
 		{
 			anim1 = 1.0f;
@@ -1142,58 +1236,71 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 	}
 
+	//Tecla L de activación para reproducción de key frames
 	if (keys[GLFW_KEY_L])
 	{
+		//Bandera de estado de animación, y indice de frame sea mayor a 0
 		if (play == false && (FrameIndex > 1))
 		{
-
+			//Reiniciamos Elementos
 			resetElements();
-			//First Interpolation				
+			//Realizamos interpolación			
 			interpolation();
-
+			//Iniciamos valores seguros
 			play = true;
 			playIndex = 0;
 			i_curr_steps = 0;
 		}
 		else
 		{
+			//Caso contrario apaga animación
 			play = false;
 		}
 
 	}
 
+	//Tecla K para guarda estado de posición de objeto y key frame
 	if (keys[GLFW_KEY_K])
 	{
+		//Bandera de el indice de frames es menor al maximo de frames 
 		if (FrameIndex < MAX_FRAMES)
 		{
+			//Función para salvar el estado, posicion del objeto y frame
 			saveFrame();
 		}
 
 	}
+
+	//Tecla P de activación para reproducción de key frames
 	if (keys[GLFW_KEY_P])
 	{
+		//Bandera de estado de animación, y indice de frame sea mayor a 0
 		if (play2 == false && (FrameIndex2 > 1))
 		{
-
+			//Reiniciamos Elementos
 			resetElements2();
-			//First Interpolation				
+			//Realizamos interpolación				
 			interpolation2();
-
+			//Iniciamos valores seguros
 			play2 = true;
 			playIndex2 = 0;
 			i_curr_steps2 = 0;
 		}
 		else
 		{
+			//Caso contrario apaga animación
 			play2 = false;
 		}
 
 	}
 
+	//Tecla O para guarda estado de posición de objeto y key frame
 	if (keys[GLFW_KEY_O])
 	{
+		//Bandera de el indice de frames es menor al maximo de frames 
 		if (FrameIndex2 < MAX_FRAMES)
 		{
+			//Función para salvar el estado, posicion del objeto y frame
 			saveFrame2();
 		}
 
@@ -1201,8 +1308,10 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 }
 
+//Función de llamada de mouse
 void MouseCallback(GLFWwindow* window, double xPos, double yPos)
 {
+	//Bandera para lectura de posición de mouse
 	if (firstMouse)
 	{
 		lastX = xPos;
@@ -1210,11 +1319,14 @@ void MouseCallback(GLFWwindow* window, double xPos, double yPos)
 		firstMouse = false;
 	}
 
+	//Almacenado de posición anterior de ambos ejes
 	GLfloat xOffset = xPos - lastX;
 	GLfloat yOffset = lastY - yPos;  // Reversed since y-coordinates go from bottom to left
 
+	//Almacen de posición actual
 	lastX = xPos;
 	lastY = yPos;
 
+	//enviado de posición a funcion y procesamiento de camara
 	camera.ProcessMouseMovement(xOffset, yOffset);
 }
