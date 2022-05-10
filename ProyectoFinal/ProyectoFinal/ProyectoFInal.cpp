@@ -875,7 +875,7 @@ int main()
 //Funcion de Insertado de sonido de intro
 void Sonido()
 {
-	//PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
+	PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
 }
 
 //Funcion de Insertado de sonido de ambientación
@@ -1198,7 +1198,7 @@ void animacion3()
 	}
 }
 
-	// Is called whenever a key is pressed/released via GLFW
+	// Activación de una tecla de solo un momento
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)

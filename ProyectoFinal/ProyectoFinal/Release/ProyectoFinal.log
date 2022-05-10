@@ -16,18 +16,18 @@ C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINA
               T=float
           ]
 C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(768,23): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1259,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1260,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1264,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1265,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1267,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1268,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1317,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1318,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1323,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1324,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1327,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\ProyectoFInal.cpp(1328,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
 soil2-debug.lib(SOIL2.obj) : warning LNK4075: se omite '/EDITANDCONTINUE' debido a la especificación '/OPT:ICF'
 LINK : warning LNK4098: la biblioteca predeterminada'MSVCRTD' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
   Generando código
-  15 of 714 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
+  8 of 714 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    7 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada
 soil2-debug.lib(etc1_utils.obj) : warning LNK4099: no se encontró PDB 'soil2-debug.pdb' con 'soil2-debug.lib(etc1_utils.obj)' o en 'C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\Release\soil2-debug.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 soil2-debug.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'soil2-debug.pdb' con 'soil2-debug.lib(image_DXT.obj)' o en 'C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\Release\soil2-debug.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
