@@ -230,36 +230,46 @@ float vertices[] = {
 glm::vec3 Light1 = glm::vec3(0);
 
 //Función para salvar los frames
-void saveFrame(void)
-{
-	//Imprime el numero de frame almacenado
-	printf("frameindex %d\n", FrameIndex);
-
-	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
-	KeyFrame[FrameIndex].posX = posX;
-	KeyFrame[FrameIndex].posY = posY;
-	KeyFrame[FrameIndex].posZ = posZ;
-
-	KeyFrame[FrameIndex].rotCuerpo= rotCuerpo;
-
-	FrameIndex++;
-}
+//void saveFrame(void)
+//{
+//	//Imprime el numero de frame almacenado
+//	printf("frameindex %d\n", FrameIndex);
+//
+//	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
+//	//KeyFrame[FrameIndex].posX = posX;
+//	//printf("%f\n", KeyFrame[FrameIndex].posX);
+//	//KeyFrame[FrameIndex].posY = posY;
+//	//printf("%f\n", KeyFrame[FrameIndex].posY);
+//	//KeyFrame[FrameIndex].posZ = posZ;
+//	//printf("%f\n", KeyFrame[FrameIndex].posZ);
+//
+//	//KeyFrame[FrameIndex].rotCuerpo= rotCuerpo;
+//	//printf("%f\n", KeyFrame[FrameIndex].rotCuerpo);
+//
+//	KeyFrame[0].rotCuerpo = 0;
+//	KeyFrame[1].rotCuerpo = 45;
+//	KeyFrame[2].rotCuerpo = -1;
+//
+//	FrameIndex++;
+//}
 
 //Función para salvar los frames
-void saveFrame2(void)
-{
-	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
-	printf("frameindex %d\n", FrameIndex2);
-
-	KeyFrame2[FrameIndex2].posX2 = posX2;
-	KeyFrame2[FrameIndex2].posY2 = posY2;
-	KeyFrame2[FrameIndex2].posZ2 = posZ2;
-
-	KeyFrame2[FrameIndex2].rotBrazoDer = rotBrazoDer;
-
-
-	FrameIndex2++;
-}
+//void saveFrame2(void)
+//{
+//	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
+//	printf("frameindex %d\n", FrameIndex2);
+//
+//	KeyFrame2[FrameIndex2].posX2 = posX2;
+//
+//	KeyFrame2[FrameIndex2].posY2 = posY2;
+//	KeyFrame2[FrameIndex2].posZ2 = posZ2;
+//
+//	KeyFrame2[FrameIndex2].rotBrazoDer = rotBrazoDer;
+//	printf("%f\n", KeyFrame2[FrameIndex2].rotBrazoDer);
+//
+//
+//	FrameIndex2++;
+//}
 
 //Función para reiniciar posición inicial de objeto de frame 1
 void resetElements(void)
@@ -425,28 +435,18 @@ int main()
 	Model Libros((char*)"Models/Obj/Models/Libros/Libros.obj");
 
 
-	//Ciclo creado para inicializar valor seguro 0 todos los elementos de la estructura de frame
-	for (int i = 0; i < MAX_FRAMES; i++)
-	{
-		KeyFrame[i].posX = 0;
-		KeyFrame[i].incX = 0;
-		KeyFrame[i].incY = 0;
-		KeyFrame[i].incZ = 0;
-		KeyFrame[i].rotCuerpo= 0;
-		KeyFrame[i].rotInc = 0;
-	}
 
-	//Ciclo creado para inicializar valor seguro 0 todos los elementos de la estructura de frame 2
-	for (int i = 0; i < MAX_FRAMES; i++)
-	{
-		KeyFrame2[i].posX2 = 0;
-		KeyFrame2[i].incX2 = 0;
-		KeyFrame2[i].incY2 = 0;
-		KeyFrame2[i].incZ2 = 0;
-		KeyFrame2[i].rotBrazoDer = 0;
-		KeyFrame2[i].rotInc2 = 0;
-	}
+	KeyFrame[0].rotCuerpo = 0;
+	KeyFrame[1].rotCuerpo = 45;
+	KeyFrame[2].rotCuerpo = -1;
+	FrameIndex = 4;
 
+
+
+	KeyFrame2[0].rotBrazoDer = 0;
+	KeyFrame2[1].rotBrazoDer = 20;
+	KeyFrame2[2].rotBrazoDer = 0;
+	FrameIndex2 = 4;
 
 	//Arreglo de vertices para dibujo de cubo para skybox
 	GLfloat skyboxVertices[] = {
@@ -542,6 +542,7 @@ int main()
 	//Inicialización de funciones de sonido ambiente e intro
 	Sonido();
 	Sonido2();
+
 	// Ciclo De ejecución continua
 	while (!glfwWindowShouldClose(window))
 	{
@@ -1259,17 +1260,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 	}
 
-	//Tecla K para guarda estado de posición de objeto y key frame
-	if (keys[GLFW_KEY_K])
-	{
-		//Bandera de el indice de frames es menor al maximo de frames 
-		if (FrameIndex < MAX_FRAMES)
-		{
-			//Función para salvar el estado, posicion del objeto y frame
-			saveFrame();
-		}
 
-	}
 
 	//Tecla P de activación para reproducción de key frames
 	if (keys[GLFW_KEY_P])
@@ -1294,17 +1285,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 	}
 
-	//Tecla O para guarda estado de posición de objeto y key frame
-	if (keys[GLFW_KEY_O])
-	{
-		//Bandera de el indice de frames es menor al maximo de frames 
-		if (FrameIndex2 < MAX_FRAMES)
-		{
-			//Función para salvar el estado, posicion del objeto y frame
-			saveFrame2();
-		}
-
-	}
 
 }
 
