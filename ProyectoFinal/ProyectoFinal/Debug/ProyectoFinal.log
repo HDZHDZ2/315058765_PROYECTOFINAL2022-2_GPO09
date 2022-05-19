@@ -1,25 +1,27 @@
 ﻿  315058765_ProyectoFinal_GPO09.cpp
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(551,24): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(581,21): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(583,24): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(616,21): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(582,21): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(617,21): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(583,21): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(618,21): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(769,23): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1297,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1298,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1303,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1304,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1307,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1308,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1187,23): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1899,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1900,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1905,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1909,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1931,62): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1932,30): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1933,66): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\ProyectoFinal\315058765_ProyectoFinal_GPO09.cpp(1919,10): warning C4101: 'verticesTS': variable local sin referencia
   ProyectoFinal.vcxproj -> C:\Users\alons\Documents\Escuela\Lab. Computo\Repositorio\315058765_PROYECTOFINAL2022-2_GPO09\ProyectoFinal\Debug\ProyectoFinal.exe

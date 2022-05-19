@@ -46,9 +46,13 @@ void DoMovement();
 void animacion();
 void animacion2();
 void animacion3();
+void animacion4();
+void animacion5();
+void animacion6();
 void Sonido();
 void Sonido2();
 void Sonido3();
+void toroide();
 
 
 // Dimensiones de la ventana al crear
@@ -56,7 +60,7 @@ const GLuint WIDTH = 1920, HEIGHT = 1080;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 // Declaración de modelo de camara y su posición
-Camera  camera(glm::vec3(4.0f, 1.0f, 0.0f));
+Camera  camera(glm::vec3(15.0f, 1.0f, 0.0f));
 GLfloat lastX = WIDTH / 2.0;
 GLfloat lastY = HEIGHT / 2.0;
 
@@ -71,8 +75,9 @@ bool firstMouse = true;
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
 
 //Declaración de posición inical de objeto a mover con Key Frames
-glm::vec3 PosIni(0.0f, 0.0f, 0.0f);
-glm::vec3 PosIni2(0.0f, 0.0f, 0.0f);
+glm::vec3 PosIni(0.0f, 1.2f, 8.0f);
+glm::vec3 PosIni2(-1.0f, 0.5f, 1.5f);
+glm::vec3 PosIni3(8.0f, 0.9f, 0.0f);
 
 
 /*Declaración de variables, para activar animaciones */
@@ -81,20 +86,46 @@ float anim1=0.0f;
 float tiempo;
 int bandera;
 
+unsigned int indices[48600];
+GLuint VBO2, VAO2, EBO;
+
+
 // Posición inicial del pointlight y cubo
 glm::vec3 pointLightPositions[] = {
 	glm::vec3(0.0f,3.0f, 0.0f),
-	glm::vec3(1.5f, 0.82f, 1.15f)
-
+	glm::vec3(10.0, 3.0, 15.0),
+	glm::vec3(25.0, 3.0, 15.0),
+	glm::vec3(40.0, 3.0, 15.0),
+	glm::vec3(1.5f, 0.82f, 1.15f),
 };
 
 //Variables de movimiento y rotación para animación 3
 float movKitX = 0.0;
-float movKitZ = 0.0;
-float rotKit = 0.0;
+float movKitZ = 8.0;
+float movKitY = 12.0;
+float rotKit = -90.0;
+
+
+float movKitX2 = 0.0;
+float movKitZ2 = 0.0;
+float movKitY2 = 0.0;
+float rotKit2 = -90.0;
+float rot2 = 0.0f;
+float rot3 = 0.0f;
+float rot4 = 0.0f;
+float rot5 = 0.0f;
+
+bool anim3 = false;
+bool anim4 = false;
+bool anim5 = false;
+bool anim6 = false;
+bool recorrido10 = true;
+bool recorrido11 = false;
+
 
 //Bandera a usar la activación de recorrido de movimiento 
 bool circuito = false;
+bool circuito2 = false;
 
 /*Banderas para activar movimiento y recorrido por secciones*/
 bool recorrido1 = true;
@@ -107,12 +138,17 @@ bool recorrido7 = false;
 bool recorrido8 = false;
 bool recorrido9 = false;
 
+bool anim = false;
+bool anim2 = false;
+float rot = 0.0f;
+
+
 // Declaración de medida de tiempo entre frames usado y el ultimo frame
 GLfloat deltaTime = 0.0f;	// Diferencia de tiempo entre frames
 GLfloat lastFrame = 0.0f;  	// Tiempo del Ultimo Frame
 
 // Declaración de los key frames, primer key frame
-float posX = PosIni.x, posY = PosIni.y, posZ = PosIni.z, rotCuerpo = 0;
+float posX = PosIni.x, posY = PosIni.y, posZ = PosIni.z, rotCuerpo = 0, rotPies=0;
 
 // Declaración de los key frames, segundo key frame
 float posX2 = PosIni.x, posY2 = PosIni.y, posZ2 = PosIni2.z, rotBrazoDer = 0;
@@ -139,7 +175,9 @@ typedef struct _frame
 	float incY;		//Variable para IncrementoY
 	float incZ;		//Variable para IncrementoZ
 	float rotCuerpo; //Variable para Rotación de Cuerpo
-	float rotInc; //Variable para guardar rotación 
+	float rotInc; //Variable para guardar rotación
+	float rotInc2;
+	float rotPies;
 
 }FRAME;
 
@@ -229,47 +267,6 @@ float vertices[] = {
 //Declaración de model de luz
 glm::vec3 Light1 = glm::vec3(0);
 
-//Función para salvar los frames
-//void saveFrame(void)
-//{
-//	//Imprime el numero de frame almacenado
-//	printf("frameindex %d\n", FrameIndex);
-//
-//	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
-//	//KeyFrame[FrameIndex].posX = posX;
-//	//printf("%f\n", KeyFrame[FrameIndex].posX);
-//	//KeyFrame[FrameIndex].posY = posY;
-//	//printf("%f\n", KeyFrame[FrameIndex].posY);
-//	//KeyFrame[FrameIndex].posZ = posZ;
-//	//printf("%f\n", KeyFrame[FrameIndex].posZ);
-//
-//	//KeyFrame[FrameIndex].rotCuerpo= rotCuerpo;
-//	//printf("%f\n", KeyFrame[FrameIndex].rotCuerpo);
-//
-//	KeyFrame[0].rotCuerpo = 0;
-//	KeyFrame[1].rotCuerpo = 45;
-//	KeyFrame[2].rotCuerpo = -1;
-//
-//	FrameIndex++;
-//}
-
-//Función para salvar los frames
-//void saveFrame2(void)
-//{
-//	//Arreglo de estructura para almacenar la posición en el frame en el elemento de posición
-//	printf("frameindex %d\n", FrameIndex2);
-//
-//	KeyFrame2[FrameIndex2].posX2 = posX2;
-//
-//	KeyFrame2[FrameIndex2].posY2 = posY2;
-//	KeyFrame2[FrameIndex2].posZ2 = posZ2;
-//
-//	KeyFrame2[FrameIndex2].rotBrazoDer = rotBrazoDer;
-//	printf("%f\n", KeyFrame2[FrameIndex2].rotBrazoDer);
-//
-//
-//	FrameIndex2++;
-//}
 
 //Función para reiniciar posición inicial de objeto de frame 1
 void resetElements(void)
@@ -280,6 +277,7 @@ void resetElements(void)
 	posZ = KeyFrame[0].posZ;
 
 	rotCuerpo = KeyFrame[0].rotCuerpo;
+	rotPies = KeyFrame[0].rotPies;
 }
 
 //Función para reiniciar posición inicial de objeto
@@ -303,7 +301,7 @@ void interpolation(void)
 	KeyFrame[playIndex].incZ = (KeyFrame[playIndex + 1].posZ - KeyFrame[playIndex].posZ) / i_max_steps; //Incremento en Z
 
 	KeyFrame[playIndex].rotInc = (KeyFrame[playIndex + 1].rotCuerpo - KeyFrame[playIndex].rotCuerpo) / i_max_steps; //Incremeneto en rotación de objeto
-
+	KeyFrame[playIndex].rotPies= (KeyFrame[playIndex + 1].rotPies - KeyFrame[playIndex].rotPies) / i_max_steps; //Incremeneto en rotación de objeto
 }
 
 //Función de calculo de interpolación para realizar la animación y su velocidad de incremento, siendo lineal.
@@ -367,6 +365,9 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
+	toroide();
+
+
 	/*
 	* Inicializamos los shaders a usar
 	* Shader para iluminación
@@ -389,9 +390,19 @@ int main()
 	//Modelo de Pies
 	Model PiesP((char*)"Models/Obj/Models/Pedro/Pies/Pies.obj");
 
-
+	Model Carro((char*)"Models/Obj/Models/Carro/Carro.obj");
 	//Modelo de Dinosaurio
-	Model Dino((char*)"Models/Obj/Models/Dragon/Dragon.obj");	
+	Model AlaD((char*)"Models/Obj/Models/Dragon/AlaDerecha/AlaDerecha.obj");	
+	Model AlaI((char*)"Models/Obj/Models/Dragon/AlaIzquierda/AlaIzquierda.obj");
+	Model Dino((char*)"Models/Obj/Models/Dragon/Cuerpo/Cuerpo.obj");
+
+	//Modelo de Shaggy
+	Model ShaCabeza((char*)"Models/Obj/Models/Sha/Cabeza/Cabeza.obj");
+	Model ShaCuerpo((char*)"Models/Obj/Models/Sha/Cuerpo/Cuerpo.obj");
+	Model ShaBrazoDer((char*)"Models/Obj/Models/Sha/BrazoDer/BrazoDer.obj");
+	Model ShaBrazoIzq((char*)"Models/Obj/Models/Sha/BrazoIzq/BrazoIzq.obj");
+	Model ShaPiernaDer((char*)"Models/Obj/Models/Sha/PiernaDer/PiernaDer.obj");
+	Model ShäPiernaIzq((char*)"Models/Obj/Models/Sha/PiernaIzq/PiernaIzq.obj");
 
 	//Shader creado para animacion del agua
 	Shader Anim("Shaders/anim.vs", "Shaders/anim.frag");
@@ -399,8 +410,11 @@ int main()
 	Model Agua((char*)"Models/Obj/Models/Agua/Agua.obj");
 	//Modelo del dinosaurio cuerpo
 	Model DinosaurioCuerpo((char*)"Models/Obj/Models/DinoPerson/Cuerpo/Cuerpo.obj");
+	//Model DinosaurioCabeza((char*)"Models/Obj/Models/DinoPerson/Cabeza/Cabeza.obj");
 	//Modelo del dinosaurio pies
-	Model DinosaurioPies((char*)"Models/Obj/Models/DinoPerson/Pies/Pies.obj");
+	Model DinosaurioPiesA((char*)"Models/Obj/Models/DinoPerson/PiesA/PiesA.obj");
+
+	Model DinosaurioPiesD((char*)"Models/Obj/Models/DinoPerson/PiesD/PiesD.obj");
 	//Modelo del piso
 	Model Piso((char*)"Models/Obj/Models/Piso/Piso.obj");
 	//Modelo de la fachada
@@ -433,18 +447,36 @@ int main()
 	Model Tapete((char*)"Models/Obj/Models/Tapete/Tapete.obj");
 	//Modelo de Libros
 	Model Libros((char*)"Models/Obj/Models/Libros/Libros.obj");
+	//
+	Model Montana((char*)"Models/Obj/Models/Montaña/Montaña.obj");
+	//
+	Model Roca((char*)"Models/Obj/Models/Roca/Roca.obj");
 
 
-
+	KeyFrame[0].posX= 0;
+	KeyFrame[0].posY = 1.5;
+	KeyFrame[0].posZ= 8.0;
+	KeyFrame[1].posX = 0;
+	KeyFrame[1].posY = 1.0;
+	KeyFrame[1].posZ = 8.0;
+	KeyFrame[2].posX = 0;
+	KeyFrame[2].posY = 1.0;
+	KeyFrame[2].posZ = 8.0;
+	KeyFrame[3].posX = 0;
+	KeyFrame[3].posY = 1.0;
+	KeyFrame[3].posZ = 8.0;
 	KeyFrame[0].rotCuerpo = 0;
 	KeyFrame[1].rotCuerpo = 45;
 	KeyFrame[2].rotCuerpo = -1;
+	KeyFrame[0].rotPies= 0;
+	KeyFrame[1].rotPies = 45;
+	KeyFrame[2].rotPies= 1;
+	KeyFrame[3].rotPies = 0;
+
 	FrameIndex = 4;
 
-
-
 	KeyFrame2[0].rotBrazoDer = 0;
-	KeyFrame2[1].rotBrazoDer = 20;
+	KeyFrame2[1].rotBrazoDer = -90;
 	KeyFrame2[2].rotBrazoDer = 0;
 	FrameIndex2 = 4;
 
@@ -532,8 +564,8 @@ int main()
 	faces.push_back("SkyBox/left.tga");
 	faces.push_back("SkyBox/top.tga");
 	faces.push_back("SkyBox/bottom.tga");
-	faces.push_back("SkyBox/back.tga");
 	faces.push_back("SkyBox/front.tga");
+	faces.push_back("SkyBox/back.tga");
 
 	GLuint cubemapTexture = TextureLoading::LoadCubemap(faces);
 	//Creación de proyección en perspectiva
@@ -558,6 +590,9 @@ int main()
 		animacion();
 		animacion2();
 		animacion3();
+		animacion4();
+		animacion5();
+		animacion6();
 		// Limpiamos el buffer de ejecución y color
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -591,17 +626,74 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.7f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
 
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 1.0f, 1.0f, 0.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].linear"), 0.7f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 1.8f);
+
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].position"), pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].ambient"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].diffuse"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].specular"), 1.0f, 1.0f, 0.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].linear"), 0.7f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].quadratic"), 1.8f);
+
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].position"), pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].ambient"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].diffuse"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].specular"), 1.0f, 1.0f, 0.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].linear"), 0.7f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].quadratic"), 1.8f);
+
 		// Iniciaización de posición de spotlight, usado como animación de encedido y apagado de TV
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), 1.5f, 0.82f, 1.18f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.direction"), -5.0f, 0.0f, 1.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.ambient"), anim1, anim1, anim1);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.diffuse"), anim1, anim1, anim1);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.specular"), anim1, anim1, anim1);
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.constant"), 1.0f);
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.linear"), 0.35f);
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.quadratic"), 0.44f);
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.cutOff"), glm::cos(glm::radians(12.5f)));
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.outerCutOff"), glm::cos(glm::radians(15.0f)));
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[0].position"), 1.5f, 0.82f, 1.18f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[0].direction"), -5.0f, 0.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[0].ambient"), anim1, anim1, anim1);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[0].diffuse"), anim1, anim1, anim1);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[0].specular"), anim1, anim1, anim1);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[0].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[0].linear"), 0.35f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[0].quadratic"), 0.44f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[0].cutOff"), glm::cos(glm::radians(12.5f)));
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[0].outerCutOff"), glm::cos(glm::radians(15.0f)));
+
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].position"), 10.0f, 3.0f, -15.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].direction"), 0.0f, -1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].ambient"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].diffuse"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].specular"), 1.0f, 1.0f, 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[1].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[1].linear"), 0.35f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[1].quadratic"), 0.44f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[1].cutOff"), glm::cos(glm::radians(12.5f)));
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[1].outerCutOff"), glm::cos(glm::radians(15.0f)));
+
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].position"), 25.0f, 3.0f, -15.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].direction"), 0.0f, -1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].ambient"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].diffuse"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].specular"), 1.0f, 1.0f, 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[2].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[2].linear"), 0.35f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[2].quadratic"), 0.44f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[2].cutOff"), glm::cos(glm::radians(12.5f)));
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[2].outerCutOff"), glm::cos(glm::radians(15.0f)));
+
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].position"), 40.0f, 3.0f, -15.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].direction"), 0.0f, -1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].ambient"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].diffuse"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].specular"), 1.0f, 1.0f, 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[3].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[3].linear"), 0.35f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[3].quadratic"), 0.44f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[3].cutOff"), glm::cos(glm::radians(12.5f)));
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[3].outerCutOff"), glm::cos(glm::radians(15.0f)));
 
 		// Iniciamos la propiedad de brillo sobre material
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 16.0f);
@@ -630,21 +722,74 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
 		DinosaurioCuerpo.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
 
+		//view = camera.GetViewMatrix();//Establecemos vista
+		//model = glm::mat4(1);
+		//model = glm::translate(model, glm::vec3(0.0f, 1.2f, 8.0f));//Transformación de traslación a posición inicial
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos matriz de modelo
+		//DinosaurioCabeza.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
+
 		view = camera.GetViewMatrix();//Establecemos vista
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(0.0f, 1.2f, 8.0f));//Transformación de traslación a posición inicial
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos matriz de modelo
-		DinosaurioPies.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
+		DinosaurioPiesA.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
+
+		view = camera.GetViewMatrix();//establecemos la vista 
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(0.0f, 1.2f, 8.0f));//Transformación de traslación a posición inicial
+		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
+		DinosaurioPiesD.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
 
 		glBindVertexArray(0);//Finalizamos vertex array
 
-
-		//Caragamos modelo del dragon volador
-		view = camera.GetViewMatrix();//Iniciamos vista
-		model = glm::mat4(1);//Iniciamos modelo
-		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));//asignamos transformación de traslación al modelo, usado para animación
-		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
-		Dino.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+		view = camera.GetViewMatrix();//establecemos la vista
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -7.0f));//Transformación de traslación a posición inicial
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
+		Carro.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
 		glBindVertexArray(0);//Finalizamos vertex array
+
+		glBindVertexArray(VAO2);
+
+		glm::mat4 modelOp = glm::mat4(1.0f);
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.2f, -8.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
+		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0, 0.2f, -8.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
+		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0, 0.2f, -6.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
+		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.2f, -6.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
+		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+
+
+
+		glBindVertexArray(0);
+
 
 		//Carga de modelo del piso
 		view = camera.GetViewMatrix();//Iniciamos vista
@@ -657,6 +802,8 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		//Dibujamos el modelo de fachada
 		Fachada.Draw(lightingShader);
+
+
 		//Envíamos Modelo de Planta1 a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		//Dibujamos el modelo de Planta1
@@ -720,50 +867,321 @@ int main()
 		glBindVertexArray(0);
 
 		//Carga de Modelo Pedro Picapiedra
-		//Iniciamos Camara de vista
-		view = camera.GetViewMatrix();
-		//Enviamos modelo Cabeza de Pedro a la matriz
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//Dibujamos el modelo de Cabeza
-		CabezaP.Draw(lightingShader);
-
-		//Iniciamos Camara de vista
-		view = camera.GetViewMatrix();
-		//Enviamos modelo Cuerpo de Pedro a la matriz
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//Dibujamos el modelo de Cuerpo
+		view = camera.GetViewMatrix();//establecemos la vista 
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-1.0f,0.5f,1.5f));//Transformación de traslación a posición inicial
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
 		CuerpoP.Draw(lightingShader);
 
-		//Iniciamos Camara de vista
-		view = camera.GetViewMatrix();
-		//Enviamos modelo Pies de Pedro a la matriz
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//Dibujamos el modelo de Pies
-		PiesP.Draw(lightingShader);
+		view = camera.GetViewMatrix();//Establecemos vista
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.5f, 1.5f));//Transformación de traslación a posición inicial
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
+		CabezaP.Draw(lightingShader);
 
-		//Iniciamos Camara de vista
-		view = camera.GetViewMatrix();
-		//Transformación de traslación al modelo
-		model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
-		//Transformación de rotación al modelo
-		model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));
-		//Enviamos modelo brazo de derecho de Pedro a la matriz
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//Dibujamos el modelo de Brazo Derecho
-		BrazoDer.Draw(lightingShader);
+		view = camera.GetViewMatrix();//Establecemos vista
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.5f, 1.5f));//Transformación de traslación a posición inicial
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
+		PiesP.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
 
-		//Iniciamos Camara de vista
-		view = camera.GetViewMatrix();
-		model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));
-		//Enviamos modelo brazo de izquierdo de Pedro a la matriz
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//Dibujamos el modelo de Brazo Izquierdo
-		BrazoIzq.Draw(lightingShader);
+		view = camera.GetViewMatrix();//Establecemos vista
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.5f, 1.5f));//Transformación de traslación a posición inicial
+		//model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));//Transformación de traslación a posición inicial
+		model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
+		BrazoIzq.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
+
+		view = camera.GetViewMatrix();//Establecemos vista
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.5f, 1.5f));//Transformación de traslación a posición inicial
+		//model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));//Transformación de traslación a posición inicial
+		model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
+		BrazoDer.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
+
+
 
 		//Finalizamos vertex array
 		glBindVertexArray(0);
 
+		//Shaggy
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni3 + glm::vec3(movKitX2,movKitY2, movKitZ2));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit2), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		ShaCuerpo.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni3 + glm::vec3(movKitX2, movKitY2, movKitZ2));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit2), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		ShaCabeza.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni3 + glm::vec3(movKitX2, movKitY2, movKitZ2));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit2), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::rotate(model, glm::radians(-rot2), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		ShaBrazoDer.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni3 + glm::vec3(movKitX2, movKitY2, movKitZ2));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit2), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::rotate(model, glm::radians(-rot3), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		ShaBrazoIzq.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni3 + glm::vec3(movKitX2, movKitY2, movKitZ2));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit2), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::rotate(model, glm::radians(-rot3), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		ShaPiernaDer.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni3 + glm::vec3(movKitX2, movKitY2, movKitZ2));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit2), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::rotate(model, glm::radians(-rot2), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		ShäPiernaIzq.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		glBindVertexArray(0);//Finalizamos vertex array
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, movKitY, movKitZ));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::scale(model, glm::vec3(3.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		Dino.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, movKitY, movKitZ));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::rotate(model, glm::radians(-rot), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(3.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		AlaD.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, movKitY, movKitZ));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));//asignamos transofmración de rotación al modelo, usado para cambio de dirección 
+		model = glm::rotate(model, glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(3.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos a la matriz el modelo
+		AlaI.Draw(lightingShader);//Dibujamos el modelo del dinosaurio
+
+
+		glBindVertexArray(0);//Finalizamos vertex array
 		//Iniciamos el shader animación para uso
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(-30.0, 0.0, 10.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(-30.0, 0.0, 30.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(-30.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(-30.0, 0.0, -10.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(-40.0, 0.0, 20.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(-40.0, 0.0, 0.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(-40.0, 0.0, -30.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(50.0, 0.0, 40.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, 40.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, 40.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(50.0, 0.0, 0.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(35.0, 0.0, 50.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, 50.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(0.0, 0.0, 50.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(50.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Roca.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(35.0, 0.0, -50.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, -50.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(0.0, 0.0, -50.0));//asignamos transformación de traslación al modelo, usado para animación
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Montana.Draw(lightingShader);
+
+
 		Anim.Use();
 		//Utilizamos el tiempo generado por procesador para animación
 		tiempo = glfwGetTime();
@@ -821,13 +1239,14 @@ int main()
 		glBindVertexArray(VAO);
 		//Dibujado de cubo de point light
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 
 		//Creación de modelo de iluminación punto
 		model = glm::mat4(1);
 		//Transformación de traslación en iluminación punto
 		model = glm::translate(model, pointLightPositions[1]);
 		//Transformación de escalado en iluminación punto
-		model = glm::scale(model, glm::vec3(0.2f,0.5f,0.7f)); 
+		model = glm::scale(model, glm::vec3(0.2f));
 		//Enviar modelo a matriz
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glBindVertexArray(VAO);
@@ -835,6 +1254,79 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
+		//Creación de modelo de iluminación punto
+		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
+		model = glm::translate(model, pointLightPositions[2]);
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f));
+		//Enviar modelo a matriz
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		//Creación de modelo de iluminación punto
+		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
+		model = glm::translate(model, pointLightPositions[3]);
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f));
+		//Enviar modelo a matriz
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
+		model = glm::translate(model, pointLightPositions[4]);
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f, 0.5f, 0.7f));
+		//Enviar modelo a matriz
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
+		model = glm::translate(model, glm::vec3(10.0f, 3.0f, -15.0f));
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f));
+		//Enviar modelo a matriz
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
+		model = glm::translate(model, glm::vec3(25.0f, 3.0f, -15.0f));
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f));
+		//Enviar modelo a matriz
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		model = glm::mat4(1);
+		//Transformación de traslación en iluminación punto
+		model = glm::translate(model, glm::vec3(40.0f, 3.0f, -15.0f));
+		//Transformación de escalado en iluminación punto
+		model = glm::scale(model, glm::vec3(0.2f));
+		//Enviar modelo a matriz
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(VAO);
+		//Dibujado de cubo de point light
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 		// Dibujamos al ultimo el skybox
 		glDepthFunc(GL_LEQUAL);
 		//Iniciamos shader de sky box para su uso
@@ -876,7 +1368,7 @@ int main()
 //Funcion de Insertado de sonido de intro
 void Sonido()
 {
-	PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
+	//PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
 }
 
 //Funcion de Insertado de sonido de ambientación
@@ -935,7 +1427,15 @@ void DoMovement()
 	if (keys[GLFW_KEY_I])
 	{
 		circuito = true;
+		anim = true;
 	}
+
+	if (keys[GLFW_KEY_N])
+	{
+		circuito2 = true;
+		anim3 = true;
+	}
+
 
 	//Control de pausado de movimiento de dragon
 	if (keys[GLFW_KEY_O])
@@ -947,17 +1447,17 @@ void DoMovement()
 	//Movimiento de cuerpo de dinosaurio positivo
 	if (keys[GLFW_KEY_1])
 	{
-		if (rotCuerpo < 45.0)
-			rotCuerpo += 1.0f;
+		if (rotPies < 45.0)
+			rotPies += 1.0f;
+			
 
 	}
 
 	//Movimiento de cuerpo de dinosaurio negativo
 	if (keys[GLFW_KEY_2])
 	{
-		if (rotCuerpo > -1)
-			rotCuerpo -= 1.0f;
-
+		if (rotPies > -1)
+			rotPies -= 1.0f;
 	}
 
 	//Movimiento de brazos de Pedro positivo
@@ -989,8 +1489,9 @@ void animacion()
 		{
 			//Desplazamiento en X
 			movKitX += 0.1f;
+			movKitY -= 0.02f;
 			//Bandera de limite de 20 unidades
-			if (movKitX > 20)
+			if (movKitX > 40 )
 			{
 				//Cambio de recorrido
 				recorrido1 = false;
@@ -1003,7 +1504,7 @@ void animacion()
 			//Cambio de dirección
 			rotKit += 1;
 			//Bandera de limite de 90 grados
-			if (rotKit > 90)
+			if (rotKit > 0)
 			{
 				//Cambio de recorrido
 				recorrido2 = false;
@@ -1015,6 +1516,7 @@ void animacion()
 		{
 			//Desplazamiento en Z negativo
 			movKitZ -= 0.1f;
+			movKitY += 0.03f;
 			//Bandera de limite de 20 unidades menos
 			if (movKitZ < -20)
 			{
@@ -1029,7 +1531,7 @@ void animacion()
 			//Cambio de dirección
 			rotKit += 1;
 			//Bandera de limite en 180 grados
-			if (rotKit > 180)
+			if (rotKit > 90)
 			{
 				//Cambio de recorrido
 				recorrido4 = false;
@@ -1041,6 +1543,7 @@ void animacion()
 		{
 			//Desplazamiento en X negativo
 			movKitX -= 0.1f;
+			movKitY -= 0.015f;
 			//Bandera de limite de 20 unidades menos
 			if (movKitX < -20)
 			{
@@ -1055,7 +1558,7 @@ void animacion()
 			//Cambio de dirección
 			rotKit += 1;
 			//Bandera de limite en 270 grados
-			if (rotKit > 270)
+			if (rotKit > 180)
 			{
 				//Cambio de recorrido
 				recorrido6 = false;
@@ -1067,6 +1570,7 @@ void animacion()
 		{
 			//Desplazamiento en Z positivo
 			movKitZ += 0.1f;
+			movKitY += 0.03f;
 			//Bandera de limite de 0 unidades
 			if (movKitZ > 0)
 			{
@@ -1081,7 +1585,7 @@ void animacion()
 			//Cambio de dirección
 			rotKit += 1;
 			//Bandera de limite en 360 grados
-			if (rotKit > 360)
+			if (rotKit > 270)
 			{
 				//Cambio de recorrido
 				recorrido8 = false;
@@ -1093,12 +1597,13 @@ void animacion()
 		{
 			//Desplazamiento en X positivo
 			movKitX += 0.1f;
+			movKitY += 0.03f;
 			//Bandera de limite de 0 unidades
 			if (movKitX > 0)
 			{
+				rotKit = -90;
 				//Cambio de recorrido
 				recorrido9 = false;
-				rotKit = 0;
 				recorrido1 = true;
 			}
 		}
@@ -1142,6 +1647,7 @@ void animacion2()
 			posZ += KeyFrame[playIndex].incZ;
 
 			rotCuerpo += KeyFrame[playIndex].rotInc;
+			rotPies += KeyFrame[playIndex].rotPies;
 
 			i_curr_steps++;
 		}
@@ -1198,6 +1704,103 @@ void animacion3()
 
 	}
 }
+void animacion6()
+{
+	if (anim3)
+	{
+		if (rot2 <= 45.0f)
+		{
+			rot2 = rot2 + 0.5f;
+			rot3 = rot3 - 0.5f;
+		}
+		else
+		{
+			anim3 = false;
+			anim4 = true;
+		}
+	}
+	if (anim4)
+	{
+		if (rot2 >= -45.0f)
+		{
+			rot2 = rot2 - 0.5f;
+			rot3 = rot3 + 0.5f;
+		}
+		else
+		{
+			anim4 = false;
+			anim3 = true;
+		}
+	}
+
+}
+
+void animacion5()
+{
+	//Bandera de activación
+	if (circuito2)
+	{
+		//Bandera de activación recorrido 1
+		if (recorrido10)
+		{
+			//Desplazamiento en X
+			movKitX2 -= 0.05f;
+			//Bandera de limite de 20 unidades
+			if (movKitX2 < -8)
+			{
+				//Cambio de recorrido
+				recorrido10 = false;
+				recorrido11 = true;
+			}
+		}
+		//Bandera de activación recorrido 2
+		if (recorrido11)
+		{
+			//Cambio de dirección
+			rotKit2 = 90;
+			movKitX2 += 0.05f;
+			//Bandera de limite de 90 grados
+			if (movKitX2 > 8)
+			{
+				rotKit2 = -90;
+				//Cambio de recorrido
+				recorrido11 = false;
+				recorrido10 = true;
+			}
+		}
+	}
+}
+
+void animacion4()
+{
+	if (anim)
+	{
+		if (rot <= 45.0f)
+		{
+			rot = rot + 0.5f;
+		}
+		else
+		{
+			anim = false;
+			anim2 = true;
+		}
+	}
+	if (anim2)
+	{
+		if (rot >= -45.0f)
+		{
+			rot = rot - 0.5f;
+		}
+		else
+		{
+			anim2 = false;
+			anim = true;
+		}
+	}
+
+}
+
+
 
 	// Activación de una tecla de solo un momento
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -1285,7 +1888,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 	}
 
-
 }
 
 //Función de llamada de mouse
@@ -1301,12 +1903,162 @@ void MouseCallback(GLFWwindow* window, double xPos, double yPos)
 
 	//Almacenado de posición anterior de ambos ejes
 	GLfloat xOffset = xPos - lastX;
-	GLfloat yOffset = lastY - yPos;  // Reversed since y-coordinates go from bottom to left
+	//GLfloat yOffset = lastY - yPos;  // Reversed since y-coordinates go from bottom to left
 
 	//Almacen de posición actual
 	lastX = xPos;
-	lastY = yPos;
+	//lastY = yPos;
 
 	//enviado de posición a funcion y procesamiento de camara
-	camera.ProcessMouseMovement(xOffset, yOffset);
+	camera.ProcessMouseMovement(xOffset, 0);
+}
+
+void toroide()
+{
+	unsigned int indices[48600];
+	GLfloat verticesTS[6075], verticesT[97200];
+
+	int i, j, cont, cont2, aux;
+	cont = 0;
+	cont2 = 0;
+	aux = 0;
+
+
+	for (i = 0; i < 360; i = i + 45)
+	{
+		for (j = 0; j < 360; j = j + 45)
+		{
+			verticesT[cont] = (1 + 0.5 * cos((j * 3.14159265) / 180)) * cos((i * 3.14159265) / 180);
+			verticesT[cont + 1] = 0.5 * sin((j * 3.14159265) / 180);
+			verticesT[cont + 2] = (1 + 0.5 * cos((j * 3.14159265) / 180)) * sin((i * 3.14159265) / 180);
+
+			cont = cont + 3;
+		}
+	}
+
+
+	for (j = 0; j < 8; j++)
+	{
+		if (j == 7)
+		{
+			for (i = j * 8; i < j * 8 + 8; i++)
+			{
+				if (i == j * 8 + 7)
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i - 7;
+					indices[cont2 + 2] = aux;
+					cont2 = cont2 + 3;
+					aux++;
+				}
+				else
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i + 1;
+					indices[cont2 + 2] = aux;
+					cont2 = cont2 + 3;
+					aux++;
+				}
+			}
+		}
+		else
+		{
+			for (i = j * 8; i < j * 8 + 8; i++)
+			{
+				if (i == j * 8 + 7)
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i - 7;
+					indices[cont2 + 2] = i + 8;
+					cont2 = cont2 + 3;
+				}
+				else
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i + 1;
+					indices[cont2 + 2] = i + 8;
+					cont2 = cont2 + 3;
+				}
+			}
+		}
+
+	}
+
+
+	aux = 0;
+	for (j = 0; j < 8; j++)
+	{
+		if (j == 0)
+		{
+			for (i = j * 8; i < j * 8 + 8; i++)
+			{
+				if (i == j * 8 + 7)
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i - 7;
+					indices[cont2 + 2] = 56;
+					cont2 = cont2 + 3;
+					aux++;
+				}
+				else
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i + 1;
+					indices[cont2 + 2] = i + 57;
+					cont2 = cont2 + 3;
+					aux++;
+				}
+			}
+		}
+		else
+		{
+			for (i = j * 8; i < j * 8 + 8; i++)
+			{
+				if (i == j * 8 + 7)
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i - 7;
+					indices[cont2 + 2] = i - 15;
+					cont2 = cont2 + 3;
+				}
+				else
+				{
+					indices[cont2] = i;
+					indices[cont2 + 1] = i + 1;
+					indices[cont2 + 2] = i - 7;
+					cont2 = cont2 + 3;
+				}
+			}
+		}
+	}
+
+	glGenVertexArrays(1, &VAO2);
+	glGenBuffers(1, &VBO2);
+	glGenBuffers(1, &EBO);
+
+	// Enlazar  Vertex Array Object
+	glBindVertexArray(VAO2);
+
+	//2.- Copiamos nuestros arreglo de vertices en un buffer de vertices para que OpenGL lo use
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesT), verticesT, GL_STATIC_DRAW);
+	// 3.Copiamos nuestro arreglo de indices en  un elemento del buffer para que OpenGL lo use
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// 4. Despues colocamos las caracteristicas de los vertices
+
+	//Posicion
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
+
+
+
+
 }
