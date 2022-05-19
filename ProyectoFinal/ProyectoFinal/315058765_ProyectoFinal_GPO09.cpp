@@ -410,7 +410,6 @@ int main()
 	Model Agua((char*)"Models/Obj/Models/Agua/Agua.obj");
 	//Modelo del dinosaurio cuerpo
 	Model DinosaurioCuerpo((char*)"Models/Obj/Models/DinoPerson/Cuerpo/Cuerpo.obj");
-	//Model DinosaurioCabeza((char*)"Models/Obj/Models/DinoPerson/Cabeza/Cabeza.obj");
 	//Modelo del dinosaurio pies
 	Model DinosaurioPiesA((char*)"Models/Obj/Models/DinoPerson/PiesA/PiesA.obj");
 
@@ -722,11 +721,6 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
 		DinosaurioCuerpo.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
 
-		//view = camera.GetViewMatrix();//Establecemos vista
-		//model = glm::mat4(1);
-		//model = glm::translate(model, glm::vec3(0.0f, 1.2f, 8.0f));//Transformación de traslación a posición inicial
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos matriz de modelo
-		//DinosaurioCabeza.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
 
 		view = camera.GetViewMatrix();//Establecemos vista
 		model = glm::mat4(1);
@@ -896,7 +890,6 @@ int main()
 		view = camera.GetViewMatrix();//Establecemos vista
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(-1.0f, 0.5f, 1.5f));//Transformación de traslación a posición inicial
-		//model = glm::translate(model, glm::vec3(posX2, posY2, posZ2));//Transformación de traslación a posición inicial
 		model = glm::rotate(model, glm::radians(-rotBrazoDer), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
 		BrazoDer.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
@@ -1038,28 +1031,24 @@ int main()
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(-30.0, 0.0, 10.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(-30.0, 0.0, 30.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(-30.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(-30.0, 0.0, -10.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
@@ -1067,7 +1056,6 @@ int main()
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(-40.0, 0.0, 20.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
@@ -1075,7 +1063,6 @@ int main()
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(-40.0, 0.0, 0.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
@@ -1083,7 +1070,6 @@ int main()
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(-40.0, 0.0, -30.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
@@ -1091,14 +1077,12 @@ int main()
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(50.0, 0.0, 40.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(10.0, 0.0, 40.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
@@ -1106,49 +1090,42 @@ int main()
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(25.0, 0.0, 40.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(50.0, 0.0, 0.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(35.0, 0.0, 50.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(40.0, 0.0, 50.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(0.0, 0.0, 50.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(50.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(10.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
@@ -1156,28 +1133,24 @@ int main()
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(25.0, 0.0, -40.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Roca.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(35.0, 0.0, -50.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(40.0, 0.0, -50.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(0.0, 0.0, -50.0));//asignamos transformación de traslación al modelo, usado para animación
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Montana.Draw(lightingShader);
 
@@ -1368,7 +1341,7 @@ int main()
 //Funcion de Insertado de sonido de intro
 void Sonido()
 {
-	//PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
+	PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
 }
 
 //Funcion de Insertado de sonido de ambientación
