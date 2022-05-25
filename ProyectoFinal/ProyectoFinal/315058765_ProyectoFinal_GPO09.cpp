@@ -365,6 +365,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
+	//Se llama la función toroide
 	toroide();
 
 
@@ -410,9 +411,9 @@ int main()
 	Model Agua((char*)"Models/Obj/Models/Agua/Agua.obj");
 	//Modelo del dinosaurio cuerpo
 	Model DinosaurioCuerpo((char*)"Models/Obj/Models/DinoPerson/Cuerpo/Cuerpo.obj");
-	//Modelo del dinosaurio pies
+	//Modelo del dinosaurio pies traseros
 	Model DinosaurioPiesA((char*)"Models/Obj/Models/DinoPerson/PiesA/PiesA.obj");
-
+	//Modelo del dinosaurio pies delanteros
 	Model DinosaurioPiesD((char*)"Models/Obj/Models/DinoPerson/PiesD/PiesD.obj");
 	//Modelo del piso
 	Model Piso((char*)"Models/Obj/Models/Piso/Piso.obj");
@@ -446,11 +447,22 @@ int main()
 	Model Tapete((char*)"Models/Obj/Models/Tapete/Tapete.obj");
 	//Modelo de Libros
 	Model Libros((char*)"Models/Obj/Models/Libros/Libros.obj");
-	//
+	//Modelo de Montañas
 	Model Montana((char*)"Models/Obj/Models/Montaña/Montaña.obj");
-	//
+	//Modelo de Rocas
 	Model Roca((char*)"Models/Obj/Models/Roca/Roca.obj");
-
+	//Modelo de Pablo
+	Model Pablo((char*)"Models/Obj/Models/Pablo/Pablo.obj");
+	//Modelo de Betty
+	Model Betty((char*)"Models/Obj/Models/Betty/Betty.obj");
+	//Modelo de Vilma
+	Model Vilma((char*)"Models/Obj/Models/Vilma/Vilma.obj");
+	//Modelo de Rajuela
+	Model Rajuela((char*)"Models/Obj/Models/Rajuela/Rajuela.obj");
+	//Modelo de Cavernicola
+	Model Cavernicola((char*)"Models/Obj/Models/Cavernicola/Cavernicola.obj");
+	//Modelo de Trajeado
+	Model Trajeado((char*)"Models/Obj/Models/Trajeado/Trajeado.obj");
 
 	KeyFrame[0].posX= 0;
 	KeyFrame[0].posY = 1.5;
@@ -469,8 +481,7 @@ int main()
 	KeyFrame[2].rotCuerpo = -1;
 	KeyFrame[0].rotPies= 0;
 	KeyFrame[1].rotPies = 45;
-	KeyFrame[2].rotPies= 1;
-	KeyFrame[3].rotPies = 0;
+	KeyFrame[2].rotPies= -1;
 
 	FrameIndex = 4;
 
@@ -626,7 +637,7 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 1.8f);
 
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), 1.0f, 0.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), 1.0f, 1.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 1.0f, 1.0f, 0.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].constant"), 1.0f);
@@ -634,7 +645,7 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 1.8f);
 
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].position"), pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].ambient"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].ambient"), 0.0f, 1.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].diffuse"), 1.0f, 1.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].specular"), 1.0f, 1.0f, 0.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].constant"), 1.0f);
@@ -642,7 +653,7 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[2].quadratic"), 1.8f);
 
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].position"), pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].ambient"), 1.0f, 1.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].ambient"), 0.0f, 0.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].diffuse"), 1.0f, 1.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].specular"), 1.0f, 1.0f, 0.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].constant"), 1.0f);
@@ -663,7 +674,7 @@ int main()
 
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].position"), 10.0f, 3.0f, -15.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].direction"), 0.0f, -1.0f, 0.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].ambient"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].ambient"), 0.0f, 0.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].diffuse"), 1.0f, 1.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[1].specular"), 1.0f, 1.0f, 1.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[1].constant"), 1.0f);
@@ -674,7 +685,7 @@ int main()
 
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].position"), 25.0f, 3.0f, -15.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].direction"), 0.0f, -1.0f, 0.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].ambient"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].ambient"), 1.0f, 0.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].diffuse"), 1.0f, 1.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[2].specular"), 1.0f, 1.0f, 1.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[2].constant"), 1.0f);
@@ -685,7 +696,7 @@ int main()
 
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].position"), 40.0f, 3.0f, -15.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].direction"), 0.0f, -1.0f, 0.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].ambient"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].ambient"), 0.0f, 1.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].diffuse"), 1.0f, 1.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight[3].specular"), 1.0f, 1.0f, 1.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight[3].constant"), 1.0f);
@@ -716,7 +727,7 @@ int main()
 		//Carga de modelo de personaje de dinosaurio
 		view = camera.GetViewMatrix();//establecemos la vista 
 		glm::mat4 model(1);//Declaración de model
-		model = glm::translate(model, glm::vec3(posX, posY, posZ));//Transformación de traslación a posición inicial
+		model = glm::translate(model, glm::vec3(0.0f, 1.2f, 8.0f));//Transformación de traslación a posición inicial
 		model = glm::rotate(model, glm::radians(-rotCuerpo), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
 		DinosaurioCuerpo.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
@@ -725,13 +736,13 @@ int main()
 		view = camera.GetViewMatrix();//Establecemos vista
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(0.0f, 1.2f, 8.0f));//Transformación de traslación a posición inicial
+		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));//Enviamos matriz de modelo
 		DinosaurioPiesA.Draw(lightingShader);//Dibujamos el modelo  con parametro recibido de shader de iluminación
 
 		view = camera.GetViewMatrix();//establecemos la vista 
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(0.0f, 1.2f, 8.0f));//Transformación de traslación a posición inicial
-		model = glm::rotate(model, glm::radians(-rotPies), glm::vec3(0.0f, 0.0f, 1.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); //Envíamos el modelo a la matriz 
 		DinosaurioPiesD.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
 
@@ -745,40 +756,40 @@ int main()
 		Carro.Draw(lightingShader);//Dibujamos el modelo con parametro recibido de shader de iluminación
 		glBindVertexArray(0);//Finalizamos vertex array
 
-		glBindVertexArray(VAO2);
+		glBindVertexArray(VAO2);//Cargamos los valores a una matriz diferente
 
-		glm::mat4 modelOp = glm::mat4(1.0f);
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.2f, -8.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
-		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+		glm::mat4 modelTor = glm::mat4(1.0f);//Inicializamos el modelo
+		modelTor = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.2f, -8.0f));//Se realiza translación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::scale(modelTor, glm::vec3(0.2f, 0.2f, 0.2f));//Se realiza escalado del modelo de toroide
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTor));//Se envia modelo de toroide en matriz
 
-		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);//Se dibujan los elementos de la matriz
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0, 0.2f, -8.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
-		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+		modelTor = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0, 0.2f, -8.0f));//Se realiza translación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::scale(modelTor, glm::vec3(0.2f, 0.2f, 0.2f));//Se realiza escalado del modelo de toroide
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTor));//Se envia modelo de toroide en matriz
 
-		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);//Se dibujan los elementos de la matriz
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0, 0.2f, -6.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
-		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+		modelTor = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0, 0.2f, -6.0f));//Se realiza translación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::scale(modelTor, glm::vec3(0.2f, 0.2f, 0.2f));//Se realiza escalado del modelo de toroide
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTor));//Se envia modelo de toroide en matriz
 
-		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);//Se dibujan los elementos de la matriz
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.2f, -6.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));
-		modelOp = glm::scale(modelOp, glm::vec3(0.2f, 0.2f, 0.2f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelOp));
+		modelTor = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.2f, -6.0f));//Se realiza translación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::rotate(modelTor, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0));//Se realiza rotación del modelo de toroide
+		modelTor = glm::scale(modelTor, glm::vec3(0.2f, 0.2f, 0.2f));//Se realiza escalado del modelo de toroide
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTor));//Se envia modelo de toroide en matriz
 
-		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 1000, GL_UNSIGNED_INT, 0);//Se dibujan los elementos de la matriz
 
 
 
@@ -994,7 +1005,72 @@ int main()
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Sillon2.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		TV.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Mesa.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(12.0, -0.4, 15.3));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Pablo.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(25.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Sillon2.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		TV.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Mesa.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(27.0, -0.4, 15.3));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Betty.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Fachada.Draw(lightingShader);
@@ -1004,8 +1080,28 @@ int main()
 		model = glm::translate(model, glm::vec3(40.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		Fachada.Draw(lightingShader);
+		Sillon2.Draw(lightingShader);
 
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		TV.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, 15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Mesa.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(42.0, -0.4, 15.3));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Vilma.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
@@ -1016,7 +1112,72 @@ int main()
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Sillon2.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		TV.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(10.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Mesa.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(8.0, -0.4, -15.3));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Rajuela.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
 		model = glm::translate(model, glm::vec3(25.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Fachada.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Sillon2.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		TV.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(25.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Mesa.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(23.0, -0.4, -15.3));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Cavernicola.Draw(lightingShader);
+
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Fachada.Draw(lightingShader);
@@ -1026,7 +1187,28 @@ int main()
 		model = glm::translate(model, glm::vec3(40.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		Fachada.Draw(lightingShader);
+		Sillon2.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		TV.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(40.0, 0.0, -15.0));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Mesa.Draw(lightingShader);
+
+		view = camera.GetViewMatrix();//Iniciamos vista
+		model = glm::mat4(1);//Iniciamos modelo
+		model = glm::translate(model, glm::vec3(38.0, -0.4, -15.3));//asignamos transformación de traslación al modelo, usado para animación
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));//Transformación de rotación por variable
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		Trajeado.Draw(lightingShader);
 
 		view = camera.GetViewMatrix();//Iniciamos vista
 		model = glm::mat4(1);//Iniciamos modelo
@@ -1414,38 +1596,6 @@ void DoMovement()
 	if (keys[GLFW_KEY_O])
 	{
 		circuito = false;
-	}
-
-
-	//Movimiento de cuerpo de dinosaurio positivo
-	if (keys[GLFW_KEY_1])
-	{
-		if (rotPies < 45.0)
-			rotPies += 1.0f;
-			
-
-	}
-
-	//Movimiento de cuerpo de dinosaurio negativo
-	if (keys[GLFW_KEY_2])
-	{
-		if (rotPies > -1)
-			rotPies -= 1.0f;
-	}
-
-	//Movimiento de brazos de Pedro positivo
-	if (keys[GLFW_KEY_3])
-	{
-		if (rotBrazoDer< 20.0)
-			rotBrazoDer += 1.0f;
-	}
-
-	//Movimiento de brazos de Pedro negativo
-	if (keys[GLFW_KEY_4])
-	{
-		if (rotBrazoDer > 0)
-			rotBrazoDer -= 1.0f;
-
 	}
 
 }
