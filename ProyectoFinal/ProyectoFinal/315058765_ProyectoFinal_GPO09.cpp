@@ -1520,7 +1520,7 @@ int main()
 //Funcion de Insertado de sonido de intro
 void Sonido()
 {
-	//PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
+	PlaySound(TEXT("picapiedra.wav"), NULL, SND_SYNC );
 }
 
 //Funcion de Insertado de sonido de ambientación
