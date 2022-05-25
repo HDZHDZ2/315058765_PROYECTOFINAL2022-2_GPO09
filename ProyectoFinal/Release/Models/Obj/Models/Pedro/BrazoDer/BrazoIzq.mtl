@@ -1,0 +1,45 @@
+newmtl BrazoDer:palette
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BrazoDer.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 0.06
+newmtl BrazoIzq:palette
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BrazoIzq.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 0.06
+newmtl Cabeza:palette
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Cabeza.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 0.06
+newmtl CuerpoP:palette
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Cuerpo.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 0.06
+newmtl Pies:palette
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Pies.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 0.06
